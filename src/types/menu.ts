@@ -28,6 +28,8 @@ export interface Product {
   price: number;
   category: Exclude<CategoryId, "drinks">;
   image: string;
+  imageFit?: "cover" | "contain";
+  imagePosition?: string;
   branches: BranchId[];
 }
 

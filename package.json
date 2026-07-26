@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "images:optimize": "node scripts/process-product-images.mjs",
     "typecheck": "tsc --noEmit",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
     "@types/node": "22.15.3",
+    "sharp": "0.34.5",
     "typescript": "5.8.3",
     "vite": "7.0.6"
   }

@@ -59,6 +59,7 @@ npm run preview
 ```text
 .
 ├── .github/workflows/deploy.yml
+├── assets-source/product-images/
 ├── public/
 │   ├── assets/brand/
 │   ├── assets/products/
@@ -73,6 +74,7 @@ npm run preview
 │   ├── styles/
 │   ├── templates/
 │   └── types/
+├── scripts/process-product-images.mjs
 ├── en/index.html
 ├── 404.html
 ├── index.html
@@ -116,9 +118,9 @@ src/data/extras.ts
 3. أضف الاسم المركزي إلى `src/config/site.ts`.
 4. أضف المعرّف إلى خاصية `branches` في المنتجات والإضافات المتوفرة.
 
-## تغيير رابط المتجر
+## تغيير الروابط الرسمية
 
-عدّل `storeUrl` في:
+عدّل قيم `links` للمتجر وخرائط الفروع وWhatsApp وLinktree في:
 
 ```text
 src/config/site.ts
@@ -126,17 +128,29 @@ src/config/site.ts
 
 ## تغيير الشعار
 
-ضع ملف الشعار الرسمي بصيغة WebP داخل:
+ضع ملف الشعار الرسمي بصيغة SVG داخل:
 
 ```text
-public/assets/brand/logo-saweeg.webp
+public/assets/brand/logo-saweeg.svg
 ```
 
 سيظهر الشعار تلقائيًا. عند غيابه يظهر اسم «سويق» نصيًا من دون صورة مكسورة.
 
-## إضافة الصور النهائية
+## تحسين صور المنتجات
 
-ضع صور المنتجات المربعة بصيغة WebP داخل:
+توضع الصور الأصلية في:
+
+```text
+assets-source/product-images/
+```
+
+ثم تُعالج إلى WebP مربعة في مساحة sRGB وبحد أقصى 1400×1400 بكسل عبر:
+
+```bash
+npm run images:optimize
+```
+
+وتُكتب النتائج النهائية في:
 
 ```text
 public/assets/products/
@@ -159,6 +173,9 @@ public/assets/products/
 13. `talbinah-powder.webp`
 14. `madini-crepe-cheese-signature.webp`
 
+الصور المتوفرة حاليًا مرتبطة بأحد عشر منتجًا. تبقى صور
+`dates-with-sawiq.webp` و`talbinah-powder.webp`
+و`madini-crepe-cheese-signature.webp` اختيارية حتى تتوفر مصادرها الصحيحة.
 عند غياب أي صورة تبقى البطاقة متوازنة بخلفية زخرفية هادئة، وبمجرد إضافة الملف بالاسم الصحيح تظهر الصورة من دون تعديل الكود.
 
 ## English

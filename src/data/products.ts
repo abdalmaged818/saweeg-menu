@@ -10,6 +10,8 @@ export const products: Product[] = [
     price: 13,
     category: "talbinah",
     image: "talbinah-ice-cream.webp",
+    imageFit: "cover",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -19,6 +21,8 @@ export const products: Product[] = [
     price: 13,
     category: "talbinah",
     image: "cold-talbinah.webp",
+    imageFit: "cover",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -28,6 +32,8 @@ export const products: Product[] = [
     price: 15,
     category: "talbinah",
     image: "hot-talbinah.webp",
+    imageFit: "cover",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -37,6 +43,8 @@ export const products: Product[] = [
     price: 16,
     category: "sweets",
     image: "talbinah-lotus-cheesecake.webp",
+    imageFit: "cover",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -46,6 +54,8 @@ export const products: Product[] = [
     price: 16,
     category: "sweets",
     image: "dates-with-sawiq.webp",
+    imageFit: "cover",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -55,6 +65,8 @@ export const products: Product[] = [
     price: 16,
     category: "sweets",
     image: "damkah.webp",
+    imageFit: "cover",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -64,6 +76,8 @@ export const products: Product[] = [
     price: 78,
     category: "boxes",
     image: "maamoul-box.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -73,6 +87,8 @@ export const products: Product[] = [
     price: 69,
     category: "boxes",
     image: "basbousa-box.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -82,6 +98,8 @@ export const products: Product[] = [
     price: 58,
     category: "boxes",
     image: "talbinah-sachet-box.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -91,6 +109,8 @@ export const products: Product[] = [
     price: 42,
     category: "boxes",
     image: "gift-box.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -100,6 +120,8 @@ export const products: Product[] = [
     price: 68,
     category: "boxes",
     image: "al-jabirah-box.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -109,6 +131,8 @@ export const products: Product[] = [
     price: 24,
     category: "ready",
     image: "sawiq-powder.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -118,6 +142,8 @@ export const products: Product[] = [
     price: 24,
     category: "ready",
     image: "talbinah-powder.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -127,6 +153,8 @@ export const products: Product[] = [
     price: 9,
     category: "sweets",
     image: "madini-crepe-cheese-signature.webp",
+    imageFit: "cover",
+    imagePosition: "center",
     branches: ["bustan"]
   }
 ];
