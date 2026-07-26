@@ -8,128 +8,104 @@
 }
 
 .section {
-  padding-block: 3.75rem;
+  padding-block: 3rem;
 }
 
 .site-header {
   position: sticky;
-  inset-block-start: 0.75rem;
+  inset-block-start: 0;
   z-index: 80;
-  height: 76px;
+  height: calc(72px + env(safe-area-inset-top, 0px));
+  padding-block-start: max(0.5rem, env(safe-area-inset-top, 0px));
   pointer-events: none;
 }
 
 .header-shell {
-  min-height: 64px;
+  min-height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: var(--shadow-soft);
-  padding: 0.55rem 0.75rem;
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 26px rgba(31, 39, 29, 0.06);
+  padding: 0.35rem 0.5rem 0.35rem 0.7rem;
+  backdrop-filter: blur(8px);
   pointer-events: auto;
 }
 
-.desktop-nav {
-  display: none;
+[dir="ltr"] .header-shell {
+  padding: 0.35rem 0.7rem 0.35rem 0.5rem;
+}
+
+.header-actions {
+  display: flex;
   align-items: center;
   gap: 0.25rem;
 }
 
-.mobile-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
 .mobile-menu {
   position: fixed;
-  inset-block-start: 84px;
+  inset-block-start: calc(76px + env(safe-area-inset-top, 0px));
   inset-inline: 0;
   z-index: 79;
+  pointer-events: none;
+}
+
+.mobile-menu:not([hidden]) {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .hero {
   position: relative;
-  margin-block-start: -76px;
   overflow: hidden;
   background: var(--brand-beige);
-  padding-block: 9.5rem 4.75rem;
+  padding-block: 2.3rem 2.7rem;
 }
 
 .hero__inner {
-  display: block;
-  align-items: center;
-  gap: 2.5rem;
+  position: relative;
 }
 
 .hero__content {
   position: relative;
   z-index: 2;
-  max-width: 660px;
-  padding-block-end: 5rem;
+  max-width: 650px;
 }
 
-.hero__motif {
-  position: absolute;
-  inset-block-end: 2.2rem;
-  inset-inline-start: 1.25rem;
-  width: 124px;
-  aspect-ratio: 1;
+.branch-section {
+  padding-block: 2.8rem 2.4rem;
 }
 
 .branch-section__inner,
-.extras-section__inner {
+.branch-controls {
   display: grid;
-  gap: 1.75rem;
-}
-
-.category-sticky {
-  position: sticky;
-  inset-block-start: var(--category-offset);
-  z-index: 70;
-  overflow: hidden;
-  background: linear-gradient(
-    to bottom,
-    var(--page-bg) 0%,
-    rgba(248, 246, 241, 0.96) 68%,
-    rgba(248, 246, 241, 0) 100%
-  );
-  padding-block: 0.55rem 0.95rem;
-}
-
-.category-bar {
-  display: flex;
-  gap: 0.55rem;
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  padding: 0.1rem 0.1rem 0.45rem;
-  scrollbar-width: none;
-}
-
-.category-bar::-webkit-scrollbar {
-  display: none;
+  gap: 1.35rem;
 }
 
 .menu-section {
-  min-height: 520px;
-  scroll-margin-top: calc(var(--header-offset) + 90px);
+  padding-block: 1.2rem 0;
 }
 
-.menu-heading {
-  display: grid;
-  gap: 1.25rem;
-  margin-block-end: 2rem;
+.menu-category {
+  scroll-margin-top: var(--header-offset);
+}
+
+.menu-sections > .menu-category {
+  margin-block-end: 3rem;
 }
 
 .product-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 1.1rem;
+  gap: 1rem;
+}
+
+.menu-category--extras {
+  background: var(--surface-soft);
+  padding-block: 3rem;
 }
 
 .location-grid {
@@ -138,13 +114,8 @@
   gap: 1rem;
 }
 
-.extras-section {
-  scroll-margin-top: calc(var(--header-offset) + 90px);
-  background: var(--surface-soft);
-}
-
 .store-section {
-  padding-block: 3.75rem;
+  padding-block: 3rem;
 }
 
 .contact-section {
@@ -154,21 +125,21 @@
 .store-card {
   position: relative;
   display: grid;
-  gap: 1.8rem;
+  gap: 1.6rem;
   overflow: hidden;
   border-radius: var(--radius-lg);
   background: var(--green-dark);
-  padding-block: 2.5rem;
-  padding-inline: clamp(1.4rem, 6vw, 4.5rem);
+  padding-block: 2.3rem;
+  padding-inline: clamp(1.35rem, 6vw, 4.5rem);
 }
 
 .store-card::after {
   position: absolute;
   inset-block-end: -70px;
   inset-inline-end: -60px;
-  width: 180px;
+  width: 170px;
   aspect-ratio: 1;
-  border: 24px solid rgba(183, 134, 93, 0.18);
+  border: 22px solid rgba(183, 134, 93, 0.17);
   border-radius: 50%;
   content: "";
 }
@@ -176,18 +147,18 @@
 .site-footer {
   background: var(--green-dark);
   color: var(--brand-beige);
-  padding-block: 3rem 2rem;
+  padding-block: 2.7rem calc(1.8rem + env(safe-area-inset-bottom, 0px));
 }
 
 .footer-grid {
   display: grid;
-  gap: 2rem;
+  gap: 1.8rem;
 }
 
 .footer-nav {
   display: grid;
   align-content: start;
-  gap: 0.4rem;
+  gap: 0.3rem;
 }
 
 .not-found-page {

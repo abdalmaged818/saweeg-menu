@@ -30,6 +30,7 @@ export interface Product {
   image: string;
   imageFit?: "cover" | "contain";
   imagePosition?: string;
+  imageScale?: number;
   branches: BranchId[];
 }
 
@@ -46,5 +47,4 @@ export interface Extra {
 export interface AppState {
   language: Language;
   branch: BranchId;
-  category: CategoryId;
 }

@@ -11,7 +11,8 @@ export const products: Product[] = [
     category: "talbinah",
     image: "talbinah-ice-cream.webp",
     imageFit: "cover",
-    imagePosition: "center",
+    imagePosition: "center 48%",
+    imageScale: 1.04,
     branches: [...sharedBranches]
   },
   {
@@ -22,7 +23,8 @@ export const products: Product[] = [
     category: "talbinah",
     image: "cold-talbinah.webp",
     imageFit: "cover",
-    imagePosition: "center",
+    imagePosition: "center 46%",
+    imageScale: 1.04,
     branches: [...sharedBranches]
   },
   {
@@ -33,7 +35,8 @@ export const products: Product[] = [
     category: "talbinah",
     image: "hot-talbinah.webp",
     imageFit: "cover",
-    imagePosition: "center",
+    imagePosition: "center 44%",
+    imageScale: 1.04,
     branches: [...sharedBranches]
   },
   {
@@ -44,7 +47,8 @@ export const products: Product[] = [
     category: "sweets",
     image: "talbinah-lotus-cheesecake.webp",
     imageFit: "cover",
-    imagePosition: "center",
+    imagePosition: "center 46%",
+    imageScale: 1.05,
     branches: [...sharedBranches]
   },
   {
@@ -66,7 +70,8 @@ export const products: Product[] = [
     category: "sweets",
     image: "damkah.webp",
     imageFit: "cover",
-    imagePosition: "center",
+    imagePosition: "center 48%",
+    imageScale: 1.04,
     branches: [...sharedBranches]
   },
   {
@@ -77,7 +82,8 @@ export const products: Product[] = [
     category: "boxes",
     image: "maamoul-box.webp",
     imageFit: "contain",
-    imagePosition: "center",
+    imagePosition: "center 58%",
+    imageScale: 1.12,
     branches: [...sharedBranches]
   },
   {
@@ -88,7 +94,8 @@ export const products: Product[] = [
     category: "boxes",
     image: "basbousa-box.webp",
     imageFit: "contain",
-    imagePosition: "center",
+    imagePosition: "center 58%",
+    imageScale: 1.12,
     branches: [...sharedBranches]
   },
   {
@@ -99,7 +106,8 @@ export const products: Product[] = [
     category: "boxes",
     image: "talbinah-sachet-box.webp",
     imageFit: "contain",
-    imagePosition: "center",
+    imagePosition: "center 64%",
+    imageScale: 1.28,
     branches: [...sharedBranches]
   },
   {
@@ -110,7 +118,8 @@ export const products: Product[] = [
     category: "boxes",
     image: "gift-box.webp",
     imageFit: "contain",
-    imagePosition: "center",
+    imagePosition: "center 62%",
+    imageScale: 1.26,
     branches: [...sharedBranches]
   },
   {
@@ -121,7 +130,8 @@ export const products: Product[] = [
     category: "boxes",
     image: "al-jabirah-box.webp",
     imageFit: "contain",
-    imagePosition: "center",
+    imagePosition: "center 58%",
+    imageScale: 1.18,
     branches: [...sharedBranches]
   },
   {
@@ -132,7 +142,8 @@ export const products: Product[] = [
     category: "ready",
     image: "sawiq-powder.webp",
     imageFit: "contain",
-    imagePosition: "center",
+    imagePosition: "center 58%",
+    imageScale: 1.14,
     branches: [...sharedBranches]
   },
   {

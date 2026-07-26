@@ -51,18 +51,13 @@ export const branchMapUrl = (branch: BranchId): string =>
 
 export const pageUrl = (
   language: Language,
-  branch?: BranchId,
-  category?: string
+  branch?: BranchId
 ): string => {
   const languagePath = language === "en" ? "en/" : "";
   const url = new URL(`${languagePath}`, siteConfig.githubPagesUrl);
 
   if (branch) {
     url.searchParams.set("branch", branch);
-  }
-
-  if (category && category !== "talbinah") {
-    url.searchParams.set("category", category);
   }
 
   return url.toString();

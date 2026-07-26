@@ -9,11 +9,10 @@
 html {
   overflow-x: clip;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-offset) + 82px);
+  scroll-padding-top: var(--header-offset);
 }
 
 body {
-  min-width: 320px;
   margin: 0;
   overflow-x: clip;
   background: var(--page-bg);
@@ -27,10 +26,6 @@ body {
 
 html[lang="en"] body {
   font-family: "Inter", sans-serif;
-}
-
-body.mobile-menu-open {
-  overflow: hidden;
 }
 
 img {

@@ -20,7 +20,6 @@ export const bindMobileMenu = (
     );
     button.classList.toggle("is-open", open);
     menu.hidden = !open;
-    document.body.classList.toggle("mobile-menu-open", open);
   };
 
   button.addEventListener("click", () => {

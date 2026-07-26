@@ -11,16 +11,10 @@ import { getMessages } from "../i18n";
 import {
   renderExtras,
   renderMenuPage,
-  renderProducts
+  renderMenuSections
 } from "../templates/menu-page";
-import type {
-  AppState,
-  BranchId,
-  CategoryId,
-  Language
-} from "../types/menu";
+import type { AppState, BranchId, Language } from "../types/menu";
 import { bindBranchSwitcher } from "./branch-switcher";
-import { bindCategoryFilter, validCategory } from "./category-filter";
 import { attachImageFallbacks } from "./image-fallback";
 import { refreshLanguageLinks } from "./language-switcher";
 import { bindMobileMenu } from "./mobile-menu";
@@ -42,7 +36,7 @@ const storeBranch = (branch: BranchId): void => {
   try {
     localStorage.setItem(storageKey, branch);
   } catch {
-    // Storage is optional; URL state remains authoritative.
+    // URL state remains authoritative when storage is unavailable.
   }
 };
 
@@ -53,23 +47,18 @@ const getInitialState = (): AppState => {
 
   return {
     language,
-    branch: validBranch(params.get("branch")) ?? getStoredBranch() ?? "maqsed",
-    category: validCategory(params.get("category")) ?? "talbinah"
+    branch: validBranch(params.get("branch")) ?? getStoredBranch() ?? "maqsed"
   };
 };
 
 const syncUrl = (state: AppState, mode: "push" | "replace"): void => {
   const params = new URLSearchParams(window.location.search);
   params.set("branch", state.branch);
-  if (state.category === "talbinah") {
-    params.delete("category");
-  } else {
-    params.set("category", state.category);
-  }
-
-  const nextUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+  params.delete("category");
+  const query = params.toString();
+  const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
   window.history[mode === "push" ? "pushState" : "replaceState"](
-    { branch: state.branch, category: state.category },
+    { branch: state.branch },
     "",
     nextUrl
   );
@@ -86,7 +75,7 @@ const updateStructuredData = (state: AppState): void => {
   const branch = branches.find((item) => item.id === state.branch);
   const localizedBranch =
     state.language === "ar" ? branch?.nameAr : branch?.nameEn;
-  const filteredProducts = products.filter((product) =>
+  const branchProducts = products.filter((product) =>
     product.branches.includes(state.branch)
   );
   const nameKey = state.language === "ar" ? "nameAr" : "nameEn";
@@ -98,7 +87,7 @@ const updateStructuredData = (state: AppState): void => {
       state.language === "ar"
         ? `منيو سويق - ${localizedBranch ?? ""}`
         : `Saweeg Menu - ${localizedBranch ?? ""}`,
-    url: pageUrl(state.language, state.branch, state.category),
+    url: pageUrl(state.language, state.branch),
     provider: {
       "@type": "Organization",
       name: siteConfig.brandName[state.language],
@@ -118,7 +107,7 @@ const updateStructuredData = (state: AppState): void => {
       .map((category) => ({
         "@type": "MenuSection",
         name: category[nameKey],
-        hasMenuItem: filteredProducts
+        hasMenuItem: branchProducts
           .filter((product) => product.category === category.id)
           .map((product) => ({
             "@type": "MenuItem",
@@ -134,15 +123,16 @@ const updateStructuredData = (state: AppState): void => {
 };
 
 const updateSeoLinks = (state: AppState): void => {
-  const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  const canonical =
+    document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
   if (canonical) {
-    canonical.href = pageUrl(state.language, state.branch, state.category);
+    canonical.href = pageUrl(state.language, state.branch);
   }
   document
     .querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]')
     .forEach((link) => {
       const language = link.hreflang === "en" ? "en" : "ar";
-      link.href = pageUrl(language, state.branch, state.category);
+      link.href = pageUrl(language, state.branch);
     });
 };
 
@@ -159,66 +149,41 @@ export const initializeApp = (): void => {
   const refreshSelectionUi = (): void => {
     const messages = getMessages(state.language);
     const selectedBranch = branches.find((branch) => branch.id === state.branch);
-    const selectedCategory = categories.find(
-      (category) => category.id === state.category
+    const selectedName = selectedBranch
+      ? state.language === "ar"
+        ? selectedBranch.nameAr
+        : selectedBranch.nameEn
+      : "";
+
+    refs.currentBranch.textContent = messages.viewingBranch(selectedName);
+    refs.activeBranchMap.href = branchMapUrl(state.branch);
+    refs.activeBranchMap.setAttribute(
+      "aria-label",
+      messages.branchMapLabel(selectedName)
     );
 
-    refs.currentBranch.textContent =
-      state.language === "ar"
-        ? selectedBranch?.nameAr ?? ""
-        : selectedBranch?.nameEn ?? "";
-    refs.categoryTitle.textContent =
-      state.language === "ar"
-        ? selectedCategory?.nameAr ?? ""
-        : selectedCategory?.nameEn ?? "";
-    const activeBranchMap =
-      root.querySelector<HTMLAnchorElement>("[data-active-branch-map]");
-    if (activeBranchMap && selectedBranch) {
-      const selectedBranchName =
-        state.language === "ar"
-          ? selectedBranch.nameAr
-          : selectedBranch.nameEn;
-      activeBranchMap.href = branchMapUrl(state.branch);
-      activeBranchMap.setAttribute(
-        "aria-label",
-        messages.branchMapLabel(selectedBranchName)
-      );
-    }
-
-    root.querySelectorAll<HTMLElement>("[data-branch]").forEach((control) => {
-      const active = control.dataset.branch === state.branch;
-      control.classList.toggle("is-active", active);
-      control.setAttribute("aria-pressed", String(active));
-      const label = control.textContent?.trim() ?? "";
-      control.setAttribute(
-        "aria-label",
-        active ? `${label}، ${messages.branchActive}` : label
-      );
-    });
-
-    root.querySelectorAll<HTMLButtonElement>("[data-category]").forEach((button) => {
-      const active = button.dataset.category === state.category;
+    root.querySelectorAll<HTMLButtonElement>("[data-branch]").forEach((button) => {
+      const active = button.dataset.branch === state.branch;
       button.classList.toggle("is-active", active);
       button.setAttribute("aria-pressed", String(active));
       const label = button.textContent?.trim() ?? "";
       button.setAttribute(
         "aria-label",
-        active ? `${label}، ${messages.categoryActive}` : label
+        active
+          ? `${label}${state.language === "ar" ? "، " : ", "}${messages.branchActive}`
+          : label
       );
     });
 
-    refs.productSection.hidden = state.category === "drinks";
     refreshLanguageLinks(root, state);
     updateStructuredData(state);
     updateSeoLinks(state);
   };
 
   const refreshContent = (): void => {
-    if (state.category !== "drinks") {
-      renderProducts(refs.productGrid, state);
-      attachImageFallbacks(refs.productGrid);
-    }
+    renderMenuSections(refs.menuSections, state);
     renderExtras(refs.extrasList, state);
+    attachImageFallbacks(refs.menuSections);
     refreshSelectionUi();
   };
 
@@ -232,27 +197,11 @@ export const initializeApp = (): void => {
     refreshContent();
   };
 
-  const changeCategory = (category: CategoryId): void => {
-    if (state.category === category) {
-      const target =
-        category === "drinks" ? refs.extrasSection : refs.productSection;
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-    state.category = category;
-    syncUrl(state, "push");
-    refreshContent();
-    const target = category === "drinks" ? refs.extrasSection : refs.productSection;
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   bindBranchSwitcher(root, changeBranch);
-  bindCategoryFilter(root, changeCategory);
 
   window.addEventListener("popstate", () => {
     const params = new URLSearchParams(window.location.search);
     state.branch = validBranch(params.get("branch")) ?? "maqsed";
-    state.category = validCategory(params.get("category")) ?? "talbinah";
     refreshContent();
   });
 

@@ -1,8 +1,4 @@
-import {
-  assetUrl,
-  branchMapUrl,
-  siteConfig
-} from "../config/site";
+import { assetUrl, branchMapUrl, siteConfig } from "../config/site";
 import { branches } from "../data/branches";
 import { categories } from "../data/categories";
 import { extras } from "../data/extras";
@@ -11,7 +7,6 @@ import { getMessages } from "../i18n";
 import type {
   AppState,
   Branch,
-  Category,
   Extra,
   Language,
   Product
@@ -19,12 +14,10 @@ import type {
 
 export interface MenuPageRefs {
   root: HTMLElement;
-  productSection: HTMLElement;
-  productGrid: HTMLElement;
-  extrasSection: HTMLElement;
+  menuSections: HTMLElement;
   extrasList: HTMLElement;
   currentBranch: HTMLElement;
-  categoryTitle: HTMLElement;
+  activeBranchMap: HTMLAnchorElement;
   mobileMenu: HTMLElement;
   mobileMenuButton: HTMLButtonElement;
 }
@@ -49,32 +42,21 @@ const localName = (
   language: Language
 ): string => (language === "ar" ? item.nameAr : item.nameEn);
 
-const secondaryName = (
-  item: { nameAr: string; nameEn: string },
-  language: Language
-): string => (language === "ar" ? item.nameEn : item.nameAr);
-
 const appHref = (
   language: Language,
-  branch: AppState["branch"],
-  category: AppState["category"]
+  branch: AppState["branch"]
 ): string => {
   const languagePath = language === "en" ? "en/" : "";
   const query = new URLSearchParams({ branch });
-  if (category !== "talbinah") {
-    query.set("category", category);
-  }
   return `${import.meta.env.BASE_URL}${languagePath}?${query.toString()}`;
 };
 
 const createBrand = (
   language: Language,
-  branch: AppState["branch"],
-  category: AppState["category"],
-  compact = false
+  branch: AppState["branch"]
 ): HTMLAnchorElement => {
-  const brand = createElement("a", compact ? "brand brand--compact" : "brand");
-  brand.href = appHref(language, branch, category);
+  const brand = createElement("a", "brand");
+  brand.href = appHref(language, branch);
   brand.setAttribute(
     "aria-label",
     language === "ar" ? "العودة إلى منيو سويق" : "Back to Saweeg menu"
@@ -90,8 +72,8 @@ const createBrand = (
   const image = createElement("img", "brand__image");
   image.src = assetUrl(siteConfig.logoPath);
   image.alt = language === "ar" ? "شعار سويق" : "Saweeg logo";
-  image.width = compact ? 60 : 56;
-  image.height = compact ? 60 : 56;
+  image.width = 80;
+  image.height = 40;
   image.decoding = "async";
   image.dataset.fallbackKind = "logo";
 
@@ -104,45 +86,18 @@ const createHeader = (state: AppState): HTMLElement => {
   const messages = getMessages(state.language);
   const header = createElement("header", "site-header");
   const shell = createElement("div", "header-shell container");
+  const actions = createElement("div", "header-actions");
 
-  shell.append(createBrand(state.language, state.branch, state.category));
-
-  const nav = createElement("nav", "desktop-nav");
-  nav.setAttribute("aria-label", messages.navLabel);
-
-  const menuLink = createElement("a", "nav-link", messages.menu);
-  menuLink.href = "#menu-products";
-  const branchesLink = createElement("a", "nav-link", messages.branches);
-  branchesLink.href = "#branches";
-  const storeLink = createElement("a", "nav-link", messages.store);
-  storeLink.href = siteConfig.links.onlineStore;
-  storeLink.target = "_blank";
-  storeLink.rel = "noopener noreferrer";
-  const languageLink = createElement("a", "language-link", messages.language);
+  const languageLink = createElement(
+    "a",
+    "language-link",
+    state.language === "ar" ? "EN" : "العربية"
+  );
   languageLink.href = appHref(
     state.language === "ar" ? "en" : "ar",
-    state.branch,
-    state.category
+    state.branch
   );
   languageLink.dataset.languageLink = "";
-  nav.append(menuLink, branchesLink, storeLink, languageLink);
-
-  const mobileActions = createElement("div", "mobile-actions");
-  const mobileStore = createElement(
-    "a",
-    "mobile-action mobile-action--store",
-    state.language === "ar" ? "المتجر" : "Store"
-  );
-  mobileStore.href = siteConfig.links.onlineStore;
-  mobileStore.target = "_blank";
-  mobileStore.rel = "noopener noreferrer";
-  const mobileLanguage = createElement(
-    "a",
-    "mobile-action",
-    state.language === "ar" ? "EN" : "ع"
-  );
-  mobileLanguage.href = languageLink.href;
-  mobileLanguage.dataset.languageLink = "";
 
   const menuButton = createElement(
     "button",
@@ -161,11 +116,21 @@ const createHeader = (state: AppState): HTMLElement => {
     createElement("span")
   );
   menuButton.append(menuIcon);
-  mobileActions.append(mobileStore, mobileLanguage, menuButton);
-
-  shell.append(nav, mobileActions);
+  actions.append(languageLink, menuButton);
+  shell.append(createBrand(state.language, state.branch), actions);
   header.append(shell);
   return header;
+};
+
+const createExternalMenuLink = (
+  label: string,
+  href: string
+): HTMLAnchorElement => {
+  const link = createElement("a", "mobile-menu__link", label);
+  link.href = href;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  return link;
 };
 
 const createMobileMenu = (state: AppState): HTMLElement => {
@@ -177,45 +142,26 @@ const createMobileMenu = (state: AppState): HTMLElement => {
 
   const card = createElement("nav", "mobile-menu__card");
   card.setAttribute("aria-label", messages.navLabel);
-  const mobileBrand = createBrand(
-    state.language,
-    state.branch,
-    state.category,
-    true
+  const storeLink = createExternalMenuLink(
+    messages.store,
+    siteConfig.links.onlineStore
   );
-  mobileBrand.classList.add("mobile-menu__brand");
-  const menuLink = createElement("a", "mobile-menu__link", messages.menu);
-  menuLink.href = "#menu-products";
-  const branchesLink = createElement(
-    "a",
-    "mobile-menu__link",
-    messages.branches
+  const maqsedLink = createExternalMenuLink(
+    messages.maqsedLocation,
+    siteConfig.links.maqsedMap
   );
-  branchesLink.href = "#branches";
-  const storeLink = createElement(
-    "a",
-    "mobile-menu__link",
-    messages.store
+  const bustanLink = createExternalMenuLink(
+    messages.bustanLocation,
+    siteConfig.links.bustanMap
   );
-  storeLink.href = siteConfig.links.onlineStore;
-  storeLink.target = "_blank";
-  storeLink.rel = "noopener noreferrer";
-  const whatsappLink = createElement(
-    "a",
-    "mobile-menu__link",
-    messages.contactWhatsapp
+  const whatsappLink = createExternalMenuLink(
+    messages.contactWhatsapp,
+    siteConfig.links.whatsapp
   );
-  whatsappLink.href = siteConfig.links.whatsapp;
-  whatsappLink.target = "_blank";
-  whatsappLink.rel = "noopener noreferrer";
-  const linktreeLink = createElement(
-    "a",
-    "mobile-menu__link",
-    messages.saweegLinks
+  const linktreeLink = createExternalMenuLink(
+    messages.saweegLinks,
+    siteConfig.links.linktree
   );
-  linktreeLink.href = siteConfig.links.linktree;
-  linktreeLink.target = "_blank";
-  linktreeLink.rel = "noopener noreferrer";
   const languageLink = createElement(
     "a",
     "mobile-menu__link",
@@ -223,15 +169,13 @@ const createMobileMenu = (state: AppState): HTMLElement => {
   );
   languageLink.href = appHref(
     state.language === "ar" ? "en" : "ar",
-    state.branch,
-    state.category
+    state.branch
   );
   languageLink.dataset.languageLink = "";
   card.append(
-    mobileBrand,
-    menuLink,
-    branchesLink,
     storeLink,
+    maqsedLink,
+    bustanLink,
     whatsappLink,
     linktreeLink,
     languageLink
@@ -245,35 +189,21 @@ const createHero = (state: AppState): HTMLElement => {
   const section = createElement("section", "hero");
   const inner = createElement("div", "hero__inner container");
   const content = createElement("div", "hero__content");
-  const eyebrow = createElement("p", "eyebrow", messages.heroEyebrow);
-  const title = createElement("h1", "hero__title", messages.heroTitle);
-  const body = createElement("p", "hero__body", messages.heroBody);
   const button = createElement(
     "a",
     "button button--primary",
     messages.chooseBranch
   );
-  button.href = "#branches";
-  content.append(eyebrow, title, body, button);
-
-  const motif = createElement("div", "hero__motif");
-  const logoFrame = createElement("div", "hero__logo-frame");
-  logoFrame.dataset.logoFrame = "";
-  const logoFallback = createElement(
-    "span",
-    "hero__logo-fallback",
-    siteConfig.brandName[state.language]
+  button.href = "#branch-picker";
+  content.append(
+    createElement("p", "eyebrow", messages.heroEyebrow),
+    createElement("h1", "hero__title", messages.heroTitle),
+    createElement("p", "hero__body", messages.heroBody),
+    button
   );
-  const logo = createElement("img", "hero__logo");
-  logo.src = assetUrl(siteConfig.logoPath);
-  logo.alt = state.language === "ar" ? "شعار سويق" : "Saweeg logo";
-  logo.width = 240;
-  logo.height = 240;
-  logo.decoding = "async";
-  logo.dataset.fallbackKind = "logo";
-  logoFrame.append(logoFallback, logo);
-  motif.append(logoFrame);
-  inner.append(content, motif);
+  const ornament = createElement("span", "hero__ornament");
+  ornament.setAttribute("aria-hidden", "true");
+  inner.append(content, ornament);
   section.append(inner);
   return section;
 };
@@ -283,17 +213,21 @@ const createBranchButton = (
   state: AppState
 ): HTMLButtonElement => {
   const messages = getMessages(state.language);
+  const name = localName(branch, state.language);
   const button = createElement(
     "button",
     "branch-option",
-    localName(branch, state.language)
+    name
   ) as HTMLButtonElement;
   button.type = "button";
   button.dataset.branch = branch.id;
   button.setAttribute("aria-pressed", String(state.branch === branch.id));
   if (state.branch === branch.id) {
     button.classList.add("is-active");
-    button.setAttribute("aria-label", `${localName(branch, state.language)}، ${messages.branchActive}`);
+    button.setAttribute(
+      "aria-label",
+      `${name}${state.language === "ar" ? "، " : ", "}${messages.branchActive}`
+    );
   }
   return button;
 };
@@ -301,19 +235,28 @@ const createBranchButton = (
 const createBranchSection = (state: AppState): HTMLElement => {
   const messages = getMessages(state.language);
   const section = createElement("section", "branch-section section");
-  section.id = "branches";
+  section.id = "branch-picker";
   const inner = createElement("div", "container branch-section__inner");
   const copy = createElement("div", "section-heading");
   copy.append(
-    createElement("p", "eyebrow", messages.branchSectionEyebrow),
     createElement("h2", "section-title", messages.branchSectionTitle),
     createElement("p", "section-copy", messages.branchSectionBody)
   );
+
   const controls = createElement("div", "branch-controls");
   const selector = createElement("div", "branch-selector");
   selector.setAttribute("role", "group");
   selector.setAttribute("aria-label", messages.branchSelectorLabel);
   branches.forEach((branch) => selector.append(createBranchButton(branch, state)));
+
+  const active = branches.find((branch) => branch.id === state.branch);
+  const status = createElement("div", "branch-status");
+  const currentBranch = createElement(
+    "p",
+    "current-branch",
+    active ? messages.viewingBranch(localName(active, state.language)) : ""
+  );
+  currentBranch.dataset.currentBranch = "";
   const locationLink = createElement(
     "a",
     "button button--secondary branch-location-link",
@@ -323,121 +266,49 @@ const createBranchSection = (state: AppState): HTMLElement => {
   locationLink.target = "_blank";
   locationLink.rel = "noopener noreferrer";
   locationLink.dataset.activeBranchMap = "";
-  const selectedBranch = branches.find((branch) => branch.id === state.branch);
-  locationLink.setAttribute(
-    "aria-label",
-    messages.branchMapLabel(
-      selectedBranch ? localName(selectedBranch, state.language) : ""
-    )
-  );
-  controls.append(selector, locationLink);
+  if (active) {
+    locationLink.setAttribute(
+      "aria-label",
+      messages.branchMapLabel(localName(active, state.language))
+    );
+  }
+  status.append(currentBranch, locationLink);
+  controls.append(selector, status);
   inner.append(copy, controls);
   section.append(inner);
   return section;
 };
 
-const createCategoryButton = (
-  category: Category,
-  state: AppState
-): HTMLButtonElement => {
-  const messages = getMessages(state.language);
-  const button = createElement(
-    "button",
-    "category-pill",
-    localName(category, state.language)
-  ) as HTMLButtonElement;
-  button.type = "button";
-  button.dataset.category = category.id;
-  button.setAttribute("aria-pressed", String(state.category === category.id));
-  if (state.category === category.id) {
-    button.classList.add("is-active");
-    button.setAttribute(
-      "aria-label",
-      `${localName(category, state.language)}، ${messages.categoryActive}`
-    );
-  }
-  return button;
-};
-
-const createCategoryBar = (state: AppState): HTMLElement => {
-  const messages = getMessages(state.language);
-  const wrapper = createElement("div", "category-sticky");
-  const nav = createElement("nav", "category-bar container");
-  nav.setAttribute("aria-label", messages.categoriesLabel);
-  categories.forEach((category) => nav.append(createCategoryButton(category, state)));
-  wrapper.append(nav);
-  return wrapper;
+const createSectionHeading = (title: string, id: string): HTMLElement => {
+  const heading = createElement("div", "menu-category__heading");
+  const label = createElement("h2", "menu-category__title", title);
+  label.id = id;
+  const line = createElement("span", "menu-category__line");
+  line.setAttribute("aria-hidden", "true");
+  heading.append(label, line);
+  return heading;
 };
 
 const createMenuSection = (state: AppState): HTMLElement => {
   const messages = getMessages(state.language);
-  const section = createElement("section", "menu-section section");
+  const section = createElement("section", "menu-section");
   section.id = "menu-products";
-  section.dataset.productSection = "";
-  const inner = createElement("div", "container");
-  const headingRow = createElement("div", "menu-heading");
-  const copy = createElement("div", "section-heading");
-  copy.append(
-    createElement("p", "eyebrow", messages.currentBranch),
-    createElement("h2", "section-title", messages.menuSectionTitle),
-    createElement("p", "section-copy", messages.menuSectionBody)
-  );
-  const currentBranch = createElement("p", "current-branch");
-  currentBranch.dataset.currentBranch = "";
-  const branch = branches.find((item) => item.id === state.branch);
-  currentBranch.textContent = branch ? localName(branch, state.language) : "";
-  headingRow.append(copy, currentBranch);
-  const categoryTitle = createElement("h3", "category-title");
-  categoryTitle.dataset.categoryTitle = "";
-  const selectedCategory = categories.find((item) => item.id === state.category);
-  categoryTitle.textContent = selectedCategory
-    ? localName(selectedCategory, state.language)
-    : "";
-  const grid = createElement("div", "product-grid");
-  grid.dataset.productGrid = "";
-  inner.append(headingRow, categoryTitle, grid);
+  section.setAttribute("aria-label", messages.menuSectionTitle);
+  const inner = createElement("div", "container menu-sections");
+  inner.dataset.menuSections = "";
   section.append(inner);
   return section;
 };
 
 const createExtrasSection = (state: AppState): HTMLElement => {
   const messages = getMessages(state.language);
-  const section = createElement("section", "extras-section section");
+  const section = createElement("section", "menu-category menu-category--extras");
   section.id = "extras";
-  section.dataset.extrasSection = "";
-  const inner = createElement("div", "container extras-section__inner");
-  const copy = createElement("div", "section-heading");
-  copy.append(
-    createElement("p", "eyebrow", messages.currentBranch),
-    createElement("h2", "section-title", messages.extrasTitle),
-    createElement("p", "section-copy", messages.extrasBody)
-  );
+  section.setAttribute("aria-labelledby", "extras-title");
+  const inner = createElement("div", "container");
   const list = createElement("div", "extras-card");
   list.dataset.extrasList = "";
-  inner.append(copy, list);
-  section.append(inner);
-  return section;
-};
-
-const createStoreSection = (state: AppState): HTMLElement => {
-  const messages = getMessages(state.language);
-  const section = createElement("section", "store-section section");
-  const inner = createElement("div", "store-card container");
-  const copy = createElement("div", "store-card__copy");
-  copy.append(
-    createElement("p", "eyebrow eyebrow--light", messages.storeEyebrow),
-    createElement("h2", "store-card__title", messages.storeTitle),
-    createElement("p", "store-card__body", messages.storeBody)
-  );
-  const button = createElement(
-    "a",
-    "button button--light",
-    messages.storeButton
-  );
-  button.href = siteConfig.links.onlineStore;
-  button.target = "_blank";
-  button.rel = "noopener noreferrer";
-  inner.append(copy, button);
+  inner.append(createSectionHeading(messages.extrasTitle, "extras-title"), list);
   section.append(inner);
   return section;
 };
@@ -445,6 +316,7 @@ const createStoreSection = (state: AppState): HTMLElement => {
 const createBranchLocationsSection = (state: AppState): HTMLElement => {
   const messages = getMessages(state.language);
   const section = createElement("section", "locations-section section");
+  section.id = "branches";
   section.setAttribute("aria-labelledby", "branch-locations-title");
   const inner = createElement("div", "container");
   const title = createElement(
@@ -477,6 +349,29 @@ const createBranchLocationsSection = (state: AppState): HTMLElement => {
   return section;
 };
 
+const createStoreSection = (state: AppState): HTMLElement => {
+  const messages = getMessages(state.language);
+  const section = createElement("section", "store-section section");
+  const inner = createElement("div", "store-card container");
+  const copy = createElement("div", "store-card__copy");
+  copy.append(
+    createElement("p", "eyebrow eyebrow--light", messages.storeEyebrow),
+    createElement("h2", "store-card__title", messages.storeTitle),
+    createElement("p", "store-card__body", messages.storeBody)
+  );
+  const button = createElement(
+    "a",
+    "button button--light",
+    messages.storeButton
+  );
+  button.href = siteConfig.links.onlineStore;
+  button.target = "_blank";
+  button.rel = "noopener noreferrer";
+  inner.append(copy, button);
+  section.append(inner);
+  return section;
+};
+
 const createContactSection = (state: AppState): HTMLElement => {
   const messages = getMessages(state.language);
   const section = createElement("section", "contact-section section");
@@ -487,17 +382,11 @@ const createContactSection = (state: AppState): HTMLElement => {
     createElement("p", "section-copy", messages.contactBody)
   );
   const actions = createElement("div", "contact-card__actions");
-
   const links = [
-    {
-      label: messages.contactStoreButton,
-      href: siteConfig.links.onlineStore,
-      className: "button button--primary"
-    },
     {
       label: messages.contactWhatsappButton,
       href: siteConfig.links.whatsapp,
-      className: "button button--secondary"
+      className: "button button--primary"
     },
     {
       label: messages.contactLinktreeButton,
@@ -505,7 +394,6 @@ const createContactSection = (state: AppState): HTMLElement => {
       className: "button button--text"
     }
   ];
-
   links.forEach(({ label, href, className }) => {
     const link = createElement("a", className, label);
     link.href = href;
@@ -513,7 +401,6 @@ const createContactSection = (state: AppState): HTMLElement => {
     link.rel = "noopener noreferrer";
     actions.append(link);
   });
-
   card.append(copy, actions);
   section.append(card);
   return section;
@@ -525,7 +412,7 @@ const createFooter = (state: AppState): HTMLElement => {
   const inner = createElement("div", "container footer-grid");
   const brandColumn = createElement("div", "footer-brand");
   brandColumn.append(
-    createBrand(state.language, state.branch, state.category, true),
+    createElement("p", "footer-wordmark", siteConfig.brandName[state.language]),
     createElement("p", "footer-tagline", messages.footerTagline)
   );
 
@@ -534,40 +421,25 @@ const createFooter = (state: AppState): HTMLElement => {
     "aria-label",
     state.language === "ar" ? "روابط التذييل" : "Footer links"
   );
-  branches.forEach((branch) => {
-    const link = createElement(
-      "a",
-      "footer-link",
-      localName(branch, state.language)
-    );
-    link.href = appHref(state.language, branch.id, state.category);
-    link.dataset.branch = branch.id;
+  const footerLinks = [
+    { label: messages.store, href: siteConfig.links.onlineStore },
+    { label: messages.contactWhatsapp, href: siteConfig.links.whatsapp },
+    { label: messages.saweegLinks, href: siteConfig.links.linktree }
+  ];
+  footerLinks.forEach(({ label, href }) => {
+    const link = createElement("a", "footer-link", label);
+    link.href = href;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
     nav.append(link);
   });
-  const store = createElement("a", "footer-link", messages.store);
-  store.href = siteConfig.links.onlineStore;
-  store.target = "_blank";
-  store.rel = "noopener noreferrer";
-  const whatsapp = createElement(
-    "a",
-    "footer-link",
-    messages.contactWhatsapp
-  );
-  whatsapp.href = siteConfig.links.whatsapp;
-  whatsapp.target = "_blank";
-  whatsapp.rel = "noopener noreferrer";
-  const linktree = createElement("a", "footer-link", messages.saweegLinks);
-  linktree.href = siteConfig.links.linktree;
-  linktree.target = "_blank";
-  linktree.rel = "noopener noreferrer";
   const language = createElement("a", "footer-link", messages.language);
   language.href = appHref(
     state.language === "ar" ? "en" : "ar",
-    state.branch,
-    state.category
+    state.branch
   );
   language.dataset.languageLink = "";
-  nav.append(store, whatsapp, linktree, language);
+  nav.append(language);
 
   const copyright = createElement(
     "p",
@@ -599,20 +471,18 @@ const createProductCard = (
   image.dataset.fallbackKind = "product";
   image.style.objectFit = product.imageFit ?? "cover";
   image.style.objectPosition = product.imagePosition ?? "center";
+  image.style.transformOrigin = product.imagePosition ?? "center";
+  image.style.setProperty("--image-scale", String(product.imageScale ?? 1));
   media.append(decorative, image);
 
   const content = createElement("div", "product-card__content");
-  const names = createElement("div", "product-card__names");
-  names.append(
-    createElement("h3", "product-card__name", name),
-    createElement("p", "product-card__secondary", secondaryName(product, language))
-  );
+  const title = createElement("h3", "product-card__name", name);
   const price = createElement(
     "p",
     "product-card__price",
     messages.priceLabel(product.price)
   );
-  content.append(names, price);
+  content.append(title, price);
   article.append(media, content);
   return article;
 };
@@ -620,37 +490,48 @@ const createProductCard = (
 const createExtraRow = (extra: Extra, language: Language): HTMLElement => {
   const messages = getMessages(language);
   const row = createElement("div", "extra-row");
-  const names = createElement("div", "extra-row__names");
-  names.append(
-    createElement("h3", "extra-row__name", localName(extra, language)),
-    createElement("p", "extra-row__secondary", secondaryName(extra, language))
-  );
-  const meta = createElement("div", "extra-row__meta");
+  const copy = createElement("div", "extra-row__copy");
+  copy.append(createElement("h3", "extra-row__name", localName(extra, language)));
   const quantity = language === "ar" ? extra.quantityAr : extra.quantityEn;
   if (quantity) {
-    meta.append(
-      createElement("span", "extra-row__quantity", `${messages.quantity}: ${quantity}`)
-    );
+    copy.append(createElement("p", "extra-row__quantity", quantity));
   }
-  meta.append(
+  row.append(
+    copy,
     createElement("span", "extra-row__price", messages.priceLabel(extra.price))
   );
-  row.append(names, meta);
   return row;
 };
 
-export const renderProducts = (
+export const renderMenuSections = (
   container: HTMLElement,
   state: AppState
 ): void => {
   const fragment = document.createDocumentFragment();
-  products
-    .filter(
-      (product) =>
-        product.branches.includes(state.branch) &&
-        product.category === state.category
-    )
-    .forEach((product) => fragment.append(createProductCard(product, state.language)));
+  categories
+    .filter((category) => category.id !== "drinks")
+    .forEach((category) => {
+      const categoryProducts = products.filter(
+        (product) =>
+          product.branches.includes(state.branch) &&
+          product.category === category.id
+      );
+      if (categoryProducts.length === 0) {
+        return;
+      }
+      const section = createElement("section", "menu-category");
+      const titleId = `category-${category.id}`;
+      section.setAttribute("aria-labelledby", titleId);
+      const grid = createElement("div", "product-grid");
+      categoryProducts.forEach((product) =>
+        grid.append(createProductCard(product, state.language))
+      );
+      section.append(
+        createSectionHeading(localName(category, state.language), titleId),
+        grid
+      );
+      fragment.append(section);
+    });
   container.replaceChildren(fragment);
 };
 
@@ -681,7 +562,6 @@ export const renderMenuPage = (
   main.append(
     createHero(state),
     createBranchSection(state),
-    createCategoryBar(state),
     menuSection,
     extrasSection,
     createBranchLocationsSection(state),
@@ -692,34 +572,35 @@ export const renderMenuPage = (
   page.append(skipLink, header, mobileMenu, main, createFooter(state));
   root.replaceChildren(page);
 
-  const productGrid = root.querySelector<HTMLElement>("[data-product-grid]");
+  const menuSections =
+    root.querySelector<HTMLElement>("[data-menu-sections]");
   const extrasList = root.querySelector<HTMLElement>("[data-extras-list]");
-  const currentBranch = root.querySelector<HTMLElement>("[data-current-branch]");
-  const categoryTitle = root.querySelector<HTMLElement>("[data-category-title]");
+  const currentBranch =
+    root.querySelector<HTMLElement>("[data-current-branch]");
+  const activeBranchMap =
+    root.querySelector<HTMLAnchorElement>("[data-active-branch-map]");
   const mobileMenuButton =
     root.querySelector<HTMLButtonElement>("[data-mobile-menu-button]");
 
   if (
-    !productGrid ||
+    !menuSections ||
     !extrasList ||
     !currentBranch ||
-    !categoryTitle ||
+    !activeBranchMap ||
     !mobileMenuButton
   ) {
     throw new Error("Menu page could not be initialized.");
   }
 
-  renderProducts(productGrid, state);
+  renderMenuSections(menuSections, state);
   renderExtras(extrasList, state);
 
   return {
     root,
-    productSection: menuSection,
-    productGrid,
-    extrasSection,
+    menuSections,
     extrasList,
     currentBranch,
-    categoryTitle,
+    activeBranchMap,
     mobileMenu,
     mobileMenuButton
   };
@@ -729,17 +610,10 @@ export const updateMenuLinks = (root: HTMLElement, state: AppState): void => {
   root.querySelectorAll<HTMLAnchorElement>("[data-language-link]").forEach((link) => {
     link.href = appHref(
       state.language === "ar" ? "en" : "ar",
-      state.branch,
-      state.category
+      state.branch
     );
   });
   root.querySelectorAll<HTMLAnchorElement>("[data-brand-link]").forEach((link) => {
-    link.href = appHref(state.language, state.branch, state.category);
-  });
-  root.querySelectorAll<HTMLAnchorElement>("a[data-branch]").forEach((link) => {
-    const branch = link.dataset.branch;
-    if (branch === "maqsed" || branch === "bustan") {
-      link.href = appHref(state.language, branch, state.category);
-    }
+    link.href = appHref(state.language, state.branch);
   });
 };
