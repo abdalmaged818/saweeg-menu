@@ -1,0 +1,34 @@
+:root {
+  --brand-beige: #E9E5DB;
+  --brand-green: #556A51;
+  --brand-brown: #B7865D;
+
+  --green-dark: #344331;
+  --green-soft: #E7ECE5;
+
+  --brown-dark: #7A553A;
+  --brown-soft: #F1E7DE;
+
+  --page-bg: #F8F6F1;
+  --surface: #FFFFFF;
+  --surface-soft: #F1EEE7;
+
+  --text: #171914;
+  --text-soft: #6F746C;
+
+  --border: rgba(85, 106, 81, 0.14);
+
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 14px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 12px 30px rgba(31, 39, 29, 0.06);
+
+  --max-width: 1180px;
+
+  --header-offset: 88px;
+  --category-offset: 100px;
+  --focus-ring: 0 0 0 4px rgba(85, 106, 81, 0.2);
+  --transition: 180ms ease;
+}
