@@ -78,7 +78,7 @@
   position: absolute;
   inset-block-end: 2.2rem;
   inset-inline-start: 1.25rem;
-  width: 100px;
+  width: 124px;
   aspect-ratio: 1;
 }
 
@@ -132,6 +132,12 @@
   gap: 1.1rem;
 }
 
+.location-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
 .extras-section {
   scroll-margin-top: calc(var(--header-offset) + 90px);
   background: var(--surface-soft);
@@ -139,6 +145,10 @@
 
 .store-section {
   padding-block: 3.75rem;
+}
+
+.contact-section {
+  padding-block-start: 0;
 }
 
 .store-card {
