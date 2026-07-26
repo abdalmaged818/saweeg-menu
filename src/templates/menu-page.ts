@@ -1,4 +1,8 @@
-import { assetUrl, siteConfig } from "../config/site";
+import {
+  assetUrl,
+  branchMapUrl,
+  siteConfig
+} from "../config/site";
 import { branches } from "../data/branches";
 import { categories } from "../data/categories";
 import { extras } from "../data/extras";
@@ -85,10 +89,9 @@ const createBrand = (
   );
   const image = createElement("img", "brand__image");
   image.src = assetUrl(siteConfig.logoPath);
-  image.alt =
-    language === "ar" ? "شعار سويق" : "Saweeg logo";
-  image.width = compact ? 82 : 104;
-  image.height = compact ? 36 : 44;
+  image.alt = language === "ar" ? "شعار سويق" : "Saweeg logo";
+  image.width = compact ? 60 : 56;
+  image.height = compact ? 60 : 56;
   image.decoding = "async";
   image.dataset.fallbackKind = "logo";
 
@@ -112,7 +115,7 @@ const createHeader = (state: AppState): HTMLElement => {
   const branchesLink = createElement("a", "nav-link", messages.branches);
   branchesLink.href = "#branches";
   const storeLink = createElement("a", "nav-link", messages.store);
-  storeLink.href = siteConfig.storeUrl;
+  storeLink.href = siteConfig.links.onlineStore;
   storeLink.target = "_blank";
   storeLink.rel = "noopener noreferrer";
   const languageLink = createElement("a", "language-link", messages.language);
@@ -130,7 +133,7 @@ const createHeader = (state: AppState): HTMLElement => {
     "mobile-action mobile-action--store",
     state.language === "ar" ? "المتجر" : "Store"
   );
-  mobileStore.href = siteConfig.storeUrl;
+  mobileStore.href = siteConfig.links.onlineStore;
   mobileStore.target = "_blank";
   mobileStore.rel = "noopener noreferrer";
   const mobileLanguage = createElement(
@@ -174,6 +177,13 @@ const createMobileMenu = (state: AppState): HTMLElement => {
 
   const card = createElement("nav", "mobile-menu__card");
   card.setAttribute("aria-label", messages.navLabel);
+  const mobileBrand = createBrand(
+    state.language,
+    state.branch,
+    state.category,
+    true
+  );
+  mobileBrand.classList.add("mobile-menu__brand");
   const menuLink = createElement("a", "mobile-menu__link", messages.menu);
   menuLink.href = "#menu-products";
   const branchesLink = createElement(
@@ -187,9 +197,25 @@ const createMobileMenu = (state: AppState): HTMLElement => {
     "mobile-menu__link",
     messages.store
   );
-  storeLink.href = siteConfig.storeUrl;
+  storeLink.href = siteConfig.links.onlineStore;
   storeLink.target = "_blank";
   storeLink.rel = "noopener noreferrer";
+  const whatsappLink = createElement(
+    "a",
+    "mobile-menu__link",
+    messages.contactWhatsapp
+  );
+  whatsappLink.href = siteConfig.links.whatsapp;
+  whatsappLink.target = "_blank";
+  whatsappLink.rel = "noopener noreferrer";
+  const linktreeLink = createElement(
+    "a",
+    "mobile-menu__link",
+    messages.saweegLinks
+  );
+  linktreeLink.href = siteConfig.links.linktree;
+  linktreeLink.target = "_blank";
+  linktreeLink.rel = "noopener noreferrer";
   const languageLink = createElement(
     "a",
     "mobile-menu__link",
@@ -201,7 +227,15 @@ const createMobileMenu = (state: AppState): HTMLElement => {
     state.category
   );
   languageLink.dataset.languageLink = "";
-  card.append(menuLink, branchesLink, storeLink, languageLink);
+  card.append(
+    mobileBrand,
+    menuLink,
+    branchesLink,
+    storeLink,
+    whatsappLink,
+    linktreeLink,
+    languageLink
+  );
   menu.append(card);
   return menu;
 };
@@ -223,13 +257,22 @@ const createHero = (state: AppState): HTMLElement => {
   content.append(eyebrow, title, body, button);
 
   const motif = createElement("div", "hero__motif");
-  motif.setAttribute("aria-hidden", "true");
-  motif.append(
-    createElement("span", "hero__seed hero__seed--one"),
-    createElement("span", "hero__seed hero__seed--two"),
-    createElement("span", "hero__seed hero__seed--three"),
-    createElement("span", "hero__line")
+  const logoFrame = createElement("div", "hero__logo-frame");
+  logoFrame.dataset.logoFrame = "";
+  const logoFallback = createElement(
+    "span",
+    "hero__logo-fallback",
+    siteConfig.brandName[state.language]
   );
+  const logo = createElement("img", "hero__logo");
+  logo.src = assetUrl(siteConfig.logoPath);
+  logo.alt = state.language === "ar" ? "شعار سويق" : "Saweeg logo";
+  logo.width = 240;
+  logo.height = 240;
+  logo.decoding = "async";
+  logo.dataset.fallbackKind = "logo";
+  logoFrame.append(logoFallback, logo);
+  motif.append(logoFrame);
   inner.append(content, motif);
   section.append(inner);
   return section;
@@ -266,11 +309,29 @@ const createBranchSection = (state: AppState): HTMLElement => {
     createElement("h2", "section-title", messages.branchSectionTitle),
     createElement("p", "section-copy", messages.branchSectionBody)
   );
+  const controls = createElement("div", "branch-controls");
   const selector = createElement("div", "branch-selector");
   selector.setAttribute("role", "group");
   selector.setAttribute("aria-label", messages.branchSelectorLabel);
   branches.forEach((branch) => selector.append(createBranchButton(branch, state)));
-  inner.append(copy, selector);
+  const locationLink = createElement(
+    "a",
+    "button button--secondary branch-location-link",
+    messages.openBranchLocation
+  );
+  locationLink.href = branchMapUrl(state.branch);
+  locationLink.target = "_blank";
+  locationLink.rel = "noopener noreferrer";
+  locationLink.dataset.activeBranchMap = "";
+  const selectedBranch = branches.find((branch) => branch.id === state.branch);
+  locationLink.setAttribute(
+    "aria-label",
+    messages.branchMapLabel(
+      selectedBranch ? localName(selectedBranch, state.language) : ""
+    )
+  );
+  controls.append(selector, locationLink);
+  inner.append(copy, controls);
   section.append(inner);
   return section;
 };
@@ -373,11 +434,88 @@ const createStoreSection = (state: AppState): HTMLElement => {
     "button button--light",
     messages.storeButton
   );
-  button.href = siteConfig.storeUrl;
+  button.href = siteConfig.links.onlineStore;
   button.target = "_blank";
   button.rel = "noopener noreferrer";
   inner.append(copy, button);
   section.append(inner);
+  return section;
+};
+
+const createBranchLocationsSection = (state: AppState): HTMLElement => {
+  const messages = getMessages(state.language);
+  const section = createElement("section", "locations-section section");
+  section.setAttribute("aria-labelledby", "branch-locations-title");
+  const inner = createElement("div", "container");
+  const title = createElement(
+    "h2",
+    "section-title locations-section__title",
+    messages.branchLocationsTitle
+  );
+  title.id = "branch-locations-title";
+  const grid = createElement("div", "location-grid");
+
+  branches.forEach((branch) => {
+    const card = createElement("article", "location-card");
+    const name = localName(branch, state.language);
+    const heading = createElement("h3", "location-card__title", name);
+    const link = createElement(
+      "a",
+      "button button--secondary location-card__link",
+      messages.openBranchLocation
+    );
+    link.href = branchMapUrl(branch.id);
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.setAttribute("aria-label", messages.branchMapLabel(name));
+    card.append(heading, link);
+    grid.append(card);
+  });
+
+  inner.append(title, grid);
+  section.append(inner);
+  return section;
+};
+
+const createContactSection = (state: AppState): HTMLElement => {
+  const messages = getMessages(state.language);
+  const section = createElement("section", "contact-section section");
+  const card = createElement("div", "contact-card container");
+  const copy = createElement("div", "contact-card__copy");
+  copy.append(
+    createElement("h2", "section-title", messages.contactTitle),
+    createElement("p", "section-copy", messages.contactBody)
+  );
+  const actions = createElement("div", "contact-card__actions");
+
+  const links = [
+    {
+      label: messages.contactStoreButton,
+      href: siteConfig.links.onlineStore,
+      className: "button button--primary"
+    },
+    {
+      label: messages.contactWhatsappButton,
+      href: siteConfig.links.whatsapp,
+      className: "button button--secondary"
+    },
+    {
+      label: messages.contactLinktreeButton,
+      href: siteConfig.links.linktree,
+      className: "button button--text"
+    }
+  ];
+
+  links.forEach(({ label, href, className }) => {
+    const link = createElement("a", className, label);
+    link.href = href;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    actions.append(link);
+  });
+
+  card.append(copy, actions);
+  section.append(card);
   return section;
 };
 
@@ -407,9 +545,21 @@ const createFooter = (state: AppState): HTMLElement => {
     nav.append(link);
   });
   const store = createElement("a", "footer-link", messages.store);
-  store.href = siteConfig.storeUrl;
+  store.href = siteConfig.links.onlineStore;
   store.target = "_blank";
   store.rel = "noopener noreferrer";
+  const whatsapp = createElement(
+    "a",
+    "footer-link",
+    messages.contactWhatsapp
+  );
+  whatsapp.href = siteConfig.links.whatsapp;
+  whatsapp.target = "_blank";
+  whatsapp.rel = "noopener noreferrer";
+  const linktree = createElement("a", "footer-link", messages.saweegLinks);
+  linktree.href = siteConfig.links.linktree;
+  linktree.target = "_blank";
+  linktree.rel = "noopener noreferrer";
   const language = createElement("a", "footer-link", messages.language);
   language.href = appHref(
     state.language === "ar" ? "en" : "ar",
@@ -417,7 +567,7 @@ const createFooter = (state: AppState): HTMLElement => {
     state.category
   );
   language.dataset.languageLink = "";
-  nav.append(store, language);
+  nav.append(store, whatsapp, linktree, language);
 
   const copyright = createElement(
     "p",
@@ -447,6 +597,8 @@ const createProductCard = (
   image.loading = "lazy";
   image.decoding = "async";
   image.dataset.fallbackKind = "product";
+  image.style.objectFit = product.imageFit ?? "cover";
+  image.style.objectPosition = product.imagePosition ?? "center";
   media.append(decorative, image);
 
   const content = createElement("div", "product-card__content");
@@ -532,7 +684,9 @@ export const renderMenuPage = (
     createCategoryBar(state),
     menuSection,
     extrasSection,
-    createStoreSection(state)
+    createBranchLocationsSection(state),
+    createStoreSection(state),
+    createContactSection(state)
   );
   const page = createElement("div", "site");
   page.append(skipLink, header, mobileMenu, main, createFooter(state));

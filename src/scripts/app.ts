@@ -1,4 +1,9 @@
-import { pageUrl } from "../config/site";
+import {
+  absoluteAssetUrl,
+  branchMapUrl,
+  pageUrl,
+  siteConfig
+} from "../config/site";
 import { branches } from "../data/branches";
 import { categories } from "../data/categories";
 import { products } from "../data/products";
@@ -94,6 +99,20 @@ const updateStructuredData = (state: AppState): void => {
         ? `منيو سويق - ${localizedBranch ?? ""}`
         : `Saweeg Menu - ${localizedBranch ?? ""}`,
     url: pageUrl(state.language, state.branch, state.category),
+    provider: {
+      "@type": "Organization",
+      name: siteConfig.brandName[state.language],
+      url: siteConfig.links.onlineStore,
+      logo: absoluteAssetUrl(siteConfig.logoPath),
+      sameAs: [siteConfig.links.linktree]
+    },
+    location: branch
+      ? {
+          "@type": "Place",
+          name: localizedBranch,
+          hasMap: branchMapUrl(branch.id)
+        }
+      : undefined,
     hasMenuSection: categories
       .filter((category) => category.id !== "drinks")
       .map((category) => ({
@@ -152,6 +171,19 @@ export const initializeApp = (): void => {
       state.language === "ar"
         ? selectedCategory?.nameAr ?? ""
         : selectedCategory?.nameEn ?? "";
+    const activeBranchMap =
+      root.querySelector<HTMLAnchorElement>("[data-active-branch-map]");
+    if (activeBranchMap && selectedBranch) {
+      const selectedBranchName =
+        state.language === "ar"
+          ? selectedBranch.nameAr
+          : selectedBranch.nameEn;
+      activeBranchMap.href = branchMapUrl(state.branch);
+      activeBranchMap.setAttribute(
+        "aria-label",
+        messages.branchMapLabel(selectedBranchName)
+      );
+    }
 
     root.querySelectorAll<HTMLElement>("[data-branch]").forEach((control) => {
       const active = control.dataset.branch === state.branch;

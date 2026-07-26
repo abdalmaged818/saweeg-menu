@@ -8,8 +8,14 @@ export const siteConfig = {
     en: "Saweeg"
   },
   projectName: "Saweeg Digital Menu",
-  storeUrl: "https://saweegsa.com/ar",
-  logoPath: "assets/brand/logo-saweeg.webp",
+  logoPath: "assets/brand/logo-saweeg.svg",
+  links: {
+    onlineStore: "https://saweegsa.com/ar",
+    maqsedMap: "https://maps.app.goo.gl/TrhRQ4bykuBKf6bo7?g_st=ipc",
+    bustanMap: "https://maps.app.goo.gl/KRxqbYZQBAshEs556?g_st=ic",
+    linktree: "https://linktr.ee/saweeg",
+    whatsapp: "https://wa.me/+966570052424"
+  },
   repositoryUrl: "https://github.com/abdalmaged818/saweeg-menu",
   githubPagesUrl: pagesBaseUrl,
   copyrightName: {
@@ -34,6 +40,14 @@ export const siteConfig = {
 
 export const assetUrl = (path: string): string =>
   `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
+
+export const absoluteAssetUrl = (path: string): string =>
+  new URL(path.replace(/^\/+/, ""), siteConfig.githubPagesUrl).toString();
+
+export const branchMapUrl = (branch: BranchId): string =>
+  branch === "maqsed"
+    ? siteConfig.links.maqsedMap
+    : siteConfig.links.bustanMap;
 
 export const pageUrl = (
   language: Language,
