@@ -148,20 +148,6 @@ export const initializeApp = (): void => {
 
   const refreshSelectionUi = (): void => {
     const messages = getMessages(state.language);
-    const selectedBranch = branches.find((branch) => branch.id === state.branch);
-    const selectedName = selectedBranch
-      ? state.language === "ar"
-        ? selectedBranch.nameAr
-        : selectedBranch.nameEn
-      : "";
-
-    refs.currentBranch.textContent = messages.viewingBranch(selectedName);
-    refs.activeBranchMap.href = branchMapUrl(state.branch);
-    refs.activeBranchMap.setAttribute(
-      "aria-label",
-      messages.branchMapLabel(selectedName)
-    );
-
     root.querySelectorAll<HTMLButtonElement>("[data-branch]").forEach((button) => {
       const active = button.dataset.branch === state.branch;
       button.classList.toggle("is-active", active);

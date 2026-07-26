@@ -20,21 +20,64 @@ const outputDirectory = path.join(
 );
 
 const MAX_SIDE = 1400;
-const BACKGROUND = "#E9E5DB";
 const WEBP_QUALITY = 86;
 
 const imageJobs = [
-  ["الجابرة تلبينة.jpg", "al-jabirah-box.webp"],
-  ["الدمكة.jpg", "damkah.webp"],
-  ["ايسكريم تلبينة نبوية.jpg", "talbinah-ice-cream.webp"],
-  ["بودرة سويق.jpg", "sawiq-powder.webp"],
-  ["بوكس الاهداء.jpg", "gift-box.webp"],
-  ["بوكس التلبينة.jpg", "talbinah-sachet-box.webp"],
-  ["بوكس بسبوسه.jpg", "basbousa-box.webp"],
-  ["بوكس معمول.jpg", "maamoul-box.webp"],
-  ["تلبينة باردة.jpg", "cold-talbinah.webp"],
-  ["تلبينة حاره.jpg", "hot-talbinah.webp"],
-  ["تلبينه لوتس تشيز كيك.jpg", "talbinah-lotus-cheesecake.webp"]
+  {
+    sourceName: "الجابرة تلبينة.jpg",
+    outputName: "al-jabirah-box.webp",
+    verticalCrop: 0.78
+  },
+  {
+    sourceName: "الدمكة.jpg",
+    outputName: "damkah.webp",
+    verticalCrop: 0.5
+  },
+  {
+    sourceName: "ايسكريم تلبينة نبوية.jpg",
+    outputName: "talbinah-ice-cream.webp",
+    verticalCrop: 0.5
+  },
+  {
+    sourceName: "بودرة سويق.jpg",
+    outputName: "sawiq-powder.webp",
+    verticalCrop: 0.83
+  },
+  {
+    sourceName: "بوكس الاهداء.jpg",
+    outputName: "gift-box.webp",
+    verticalCrop: 1
+  },
+  {
+    sourceName: "بوكس التلبينة.jpg",
+    outputName: "talbinah-sachet-box.webp",
+    verticalCrop: 1
+  },
+  {
+    sourceName: "بوكس بسبوسه.jpg",
+    outputName: "basbousa-box.webp",
+    verticalCrop: 0.5
+  },
+  {
+    sourceName: "بوكس معمول.jpg",
+    outputName: "maamoul-box.webp",
+    verticalCrop: 0.5
+  },
+  {
+    sourceName: "تلبينة باردة.jpg",
+    outputName: "cold-talbinah.webp",
+    verticalCrop: 0.5
+  },
+  {
+    sourceName: "تلبينة حاره.jpg",
+    outputName: "hot-talbinah.webp",
+    verticalCrop: 0.55
+  },
+  {
+    sourceName: "تلبينه لوتس تشيز كيك.jpg",
+    outputName: "talbinah-lotus-cheesecake.webp",
+    verticalCrop: 0.5
+  }
 ];
 
 const fileExists = async (filePath) => {
@@ -48,7 +91,7 @@ const fileExists = async (filePath) => {
 
 await fs.mkdir(outputDirectory, { recursive: true });
 
-for (const [sourceName, outputName] of imageJobs) {
+for (const { sourceName, outputName, verticalCrop } of imageJobs) {
   const sourcePath = path.join(sourceDirectory, sourceName);
   const outputPath = path.join(outputDirectory, outputName);
 
@@ -71,19 +114,25 @@ for (const [sourceName, outputName] of imageJobs) {
   const orientedHeight = shouldSwapDimensions
     ? metadata.width
     : metadata.height;
-  const canvasSide = Math.min(
-    MAX_SIDE,
-    Math.max(orientedWidth, orientedHeight)
+  const cropSide = Math.min(orientedWidth, orientedHeight);
+  const cropLeft = Math.round((orientedWidth - cropSide) / 2);
+  const cropTop = Math.round(
+    (orientedHeight - cropSide) * verticalCrop
   );
+  const outputSide = Math.min(MAX_SIDE, cropSide);
   const outputBuffer = await sharp(sourcePath)
     .rotate()
     .toColourspace("srgb")
+    .extract({
+      left: cropLeft,
+      top: cropTop,
+      width: cropSide,
+      height: cropSide
+    })
     .resize({
-      width: canvasSide,
-      height: canvasSide,
-      fit: "contain",
-      position: "centre",
-      background: BACKGROUND,
+      width: outputSide,
+      height: outputSide,
+      fit: "cover",
       withoutEnlargement: true
     })
     .webp({
@@ -96,8 +145,8 @@ for (const [sourceName, outputName] of imageJobs) {
   const outputMetadata = await sharp(outputBuffer).metadata();
   if (
     outputMetadata.format !== "webp" ||
-    outputMetadata.width !== canvasSide ||
-    outputMetadata.height !== canvasSide
+    outputMetadata.width !== outputSide ||
+    outputMetadata.height !== outputSide
   ) {
     throw new Error(`Image verification failed: ${outputName}`);
   }
@@ -106,7 +155,7 @@ for (const [sourceName, outputName] of imageJobs) {
 
   const outputStats = await fs.stat(outputPath);
   console.log(
-    `${sourceName} -> ${outputName} (${canvasSide}x${canvasSide}, ${Math.round(
+    `${sourceName} -> ${outputName} (${outputSide}x${outputSide}, crop top ${cropTop}px, ${Math.round(
       outputStats.size / 1024
     )} KB)`
   );

@@ -62,7 +62,7 @@
   position: relative;
   overflow: hidden;
   background: var(--brand-beige);
-  padding-block: 2.3rem 2.7rem;
+  padding-block: 2.1rem 2.25rem;
 }
 
 .hero__inner {
@@ -131,17 +131,6 @@
   background: var(--green-dark);
   padding-block: 2.3rem;
   padding-inline: clamp(1.35rem, 6vw, 4.5rem);
-}
-
-.store-card::after {
-  position: absolute;
-  inset-block-end: -70px;
-  inset-inline-end: -60px;
-  width: 170px;
-  aspect-ratio: 1;
-  border: 22px solid rgba(183, 134, 93, 0.17);
-  border-radius: 50%;
-  content: "";
 }
 
 .site-footer {

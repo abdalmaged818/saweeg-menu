@@ -16,7 +16,6 @@ export const en = {
   branchSelectorLabel: "Choose a Saweeg branch",
   openBranchLocation: "Branch Location",
   branchLocationsTitle: "Saweeg Branches",
-  viewingBranch: (name: string) => `You are now viewing the ${name} menu`,
   menuSectionTitle: "Saweeg menu sections",
   extrasTitle: "Drinks & Extras",
   storeEyebrow: "Saweeg Store",

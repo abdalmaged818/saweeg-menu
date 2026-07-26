@@ -16,7 +16,6 @@ export const ar = {
   branchSelectorLabel: "اختيار فرع سويق",
   openBranchLocation: "موقع الفرع",
   branchLocationsTitle: "فروع سويق",
-  viewingBranch: (name: string) => `تعرض الآن منيو ${name}`,
   menuSectionTitle: "أقسام منيو سويق",
   extrasTitle: "المشروبات والإضافات",
   storeEyebrow: "متجر سويق",

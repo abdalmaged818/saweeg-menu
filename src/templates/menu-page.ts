@@ -16,8 +16,6 @@ export interface MenuPageRefs {
   root: HTMLElement;
   menuSections: HTMLElement;
   extrasList: HTMLElement;
-  currentBranch: HTMLElement;
-  activeBranchMap: HTMLAnchorElement;
   mobileMenu: HTMLElement;
   mobileMenuButton: HTMLButtonElement;
 }
@@ -201,9 +199,7 @@ const createHero = (state: AppState): HTMLElement => {
     createElement("p", "hero__body", messages.heroBody),
     button
   );
-  const ornament = createElement("span", "hero__ornament");
-  ornament.setAttribute("aria-hidden", "true");
-  inner.append(content, ornament);
+  inner.append(content);
   section.append(inner);
   return section;
 };
@@ -249,31 +245,7 @@ const createBranchSection = (state: AppState): HTMLElement => {
   selector.setAttribute("aria-label", messages.branchSelectorLabel);
   branches.forEach((branch) => selector.append(createBranchButton(branch, state)));
 
-  const active = branches.find((branch) => branch.id === state.branch);
-  const status = createElement("div", "branch-status");
-  const currentBranch = createElement(
-    "p",
-    "current-branch",
-    active ? messages.viewingBranch(localName(active, state.language)) : ""
-  );
-  currentBranch.dataset.currentBranch = "";
-  const locationLink = createElement(
-    "a",
-    "button button--secondary branch-location-link",
-    messages.openBranchLocation
-  );
-  locationLink.href = branchMapUrl(state.branch);
-  locationLink.target = "_blank";
-  locationLink.rel = "noopener noreferrer";
-  locationLink.dataset.activeBranchMap = "";
-  if (active) {
-    locationLink.setAttribute(
-      "aria-label",
-      messages.branchMapLabel(localName(active, state.language))
-    );
-  }
-  status.append(currentBranch, locationLink);
-  controls.append(selector, status);
+  controls.append(selector);
   inner.append(copy, controls);
   section.append(inner);
   return section;
@@ -283,9 +255,7 @@ const createSectionHeading = (title: string, id: string): HTMLElement => {
   const heading = createElement("div", "menu-category__heading");
   const label = createElement("h2", "menu-category__title", title);
   label.id = id;
-  const line = createElement("span", "menu-category__line");
-  line.setAttribute("aria-hidden", "true");
-  heading.append(label, line);
+  heading.append(label);
   return heading;
 };
 
@@ -575,18 +545,12 @@ export const renderMenuPage = (
   const menuSections =
     root.querySelector<HTMLElement>("[data-menu-sections]");
   const extrasList = root.querySelector<HTMLElement>("[data-extras-list]");
-  const currentBranch =
-    root.querySelector<HTMLElement>("[data-current-branch]");
-  const activeBranchMap =
-    root.querySelector<HTMLAnchorElement>("[data-active-branch-map]");
   const mobileMenuButton =
     root.querySelector<HTMLButtonElement>("[data-mobile-menu-button]");
 
   if (
     !menuSections ||
     !extrasList ||
-    !currentBranch ||
-    !activeBranchMap ||
     !mobileMenuButton
   ) {
     throw new Error("Menu page could not be initialized.");
@@ -599,8 +563,6 @@ export const renderMenuPage = (
     root,
     menuSections,
     extrasList,
-    currentBranch,
-    activeBranchMap,
     mobileMenu,
     mobileMenuButton
   };

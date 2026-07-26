@@ -1,8 +1,4 @@
 @media (min-width: 480px) {
-  .branch-selector {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .location-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -18,7 +14,7 @@
   }
 
   .hero {
-    padding-block: 3rem 3.25rem;
+    padding-block: 2.55rem 2.75rem;
   }
 
   .product-grid {
@@ -105,14 +101,6 @@
   }
 
   .hero {
-    padding-block: 2rem 2.35rem;
-  }
-
-  .branch-status {
-    align-items: stretch;
-  }
-
-  .branch-location-link {
-    width: 100%;
+    padding-block: 1.8rem 2rem;
   }
 }
