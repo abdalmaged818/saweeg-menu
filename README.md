@@ -2,7 +2,7 @@
 
 منيو رقمي ثنائي اللغة لعلامة **سويق**، مخصص لفرعي المقصد وبستان المستظل. بُني المشروع باستخدام Vite وTypeScript وHTML دلالي وCSS حديث، من دون إطار واجهات أو Backend أو سلة مشتريات.
 
-الموقع المنشور: [https://abdalmaged818.github.io/saweeg-menu/](https://abdalmaged818.github.io/saweeg-menu/)
+الموقع الرسمي: [https://menu.saweegsa.com/](https://menu.saweegsa.com/)
 
 ## المزايا
 
@@ -10,10 +10,10 @@
 - نسخة إنجليزية كاملة في `/en/` مع دعم LTR.
 - تبديل فوري بين فرعي المقصد وبستان المستظل.
 - حفظ الفرع في الرابط ثم في `localStorage` كخيار احتياطي.
-- تصفية المنتجات حسب التصنيف من دون إعادة تحميل الصفحة.
+- عرض جميع الأقسام بالتتابع مع تبديل الفرع من دون إعادة تحميل الصفحة.
 - عرض المشروبات والإضافات بقائمة مخصصة وسهلة القراءة.
-- معالجة مرئية هادئة عند غياب صور المنتجات أو الشعار.
-- تصميم Mobile First ومتوافق مع GitHub Pages.
+- بطاقات نصية صغيرة ومقصودة للمنتجات التي لا تتوفر لها صور رسمية.
+- تصميم Mobile First منشور عبر GitHub Pages على نطاق مخصص.
 - ملفات SEO أساسية وصفحة 404 وملف Web Manifest.
 - نشر تلقائي من فرع `main` عبر GitHub Actions.
 
@@ -48,10 +48,10 @@ npm run preview
 
 ملف `.github/workflows/deploy.yml` يبني المشروع وينشر `dist/` تلقائيًا عند كل Push إلى فرع `main`، كما يدعم التشغيل اليدوي من صفحة Actions.
 
-إعداد Vite يستخدم المسار الأساسي:
+إعداد Vite يستخدم جذر النطاق المخصص:
 
 ```text
-/saweeg-menu/
+/
 ```
 
 ## بنية الملفات
@@ -63,6 +63,7 @@ npm run preview
 ├── public/
 │   ├── assets/brand/
 │   ├── assets/products/
+│   ├── CNAME
 │   ├── robots.txt
 │   ├── sitemap.xml
 │   └── site.webmanifest
@@ -106,7 +107,8 @@ src/data/extras.ts
 - الاسم الإنجليزي `nameEn`.
 - السعر `price`.
 - التصنيف `category`.
-- اسم ملف الصورة `image`.
+- نمط العرض `displayMode`: إما `image` أو `compact`.
+- اسم ملف الصورة `image` عند استخدام نمط `image`.
 - الفروع التي يتوفر فيها المنتج `branches`.
 
 لا تنشئ قوائم منتجات منفصلة لكل فرع؛ خاصية `branches` هي مصدر التصفية.
@@ -156,28 +158,41 @@ npm run images:optimize
 public/assets/products/
 ```
 
-يجب استخدام الأسماء التالية حرفيًا:
+الصور الرسمية المتوفرة حاليًا تستخدم الأسماء التالية حرفيًا:
 
 1. `talbinah-ice-cream.webp`
 2. `cold-talbinah.webp`
 3. `hot-talbinah.webp`
 4. `talbinah-lotus-cheesecake.webp`
-5. `dates-with-sawiq.webp`
-6. `damkah.webp`
-7. `maamoul-box.webp`
-8. `basbousa-box.webp`
-9. `talbinah-sachet-box.webp`
-10. `gift-box.webp`
-11. `al-jabirah-box.webp`
-12. `sawiq-powder.webp`
-13. `talbinah-powder.webp`
-14. `madini-crepe-cheese-signature.webp`
+5. `damkah.webp`
+6. `maamoul-box.webp`
+7. `basbousa-box.webp`
+8. `talbinah-sachet-box.webp`
+9. `gift-box.webp`
+10. `al-jabirah-box.webp`
+11. `sawiq-powder.webp`
 
-الصور المتوفرة حاليًا مرتبطة بأحد عشر منتجًا. تبقى صور
-`dates-with-sawiq.webp` و`talbinah-powder.webp`
-و`madini-crepe-cheese-signature.webp` اختيارية حتى تتوفر مصادرها الصحيحة.
-عند غياب أي صورة تبقى البطاقة متوازنة بخلفية زخرفية هادئة، وبمجرد إضافة الملف بالاسم الصحيح تظهر الصورة من دون تعديل الكود.
+المنتجات `dates-with-sawiq` و`talbinah-powder`
+و`madini-crepe-cheese-signature` تستخدم `displayMode: "compact"` ولا تنشئ
+مساحة صورة أو Placeholder. لا يُحوّل أي منها إلى بطاقة مصورة إلا بعد إضافة
+مصدر رسمي مطابق وتحديث `displayMode` واسم الملف في البيانات.
+
+## النطاق الرسمي
+
+يحتوي `public/CNAME` على:
+
+```text
+menu.saweegsa.com
+```
+
+وسجل DNS المطلوب للنطاق الفرعي هو:
+
+```text
+Type: CNAME
+Host: menu
+Target: abdalmaged818.github.io
+```
 
 ## English
 
-Saweeg Digital Menu is a lightweight bilingual Vite and TypeScript website for the Al-Maqsad and Bustan Al-Mustazal branches. Product, branch, category, and extras data are maintained as typed TypeScript data, while GitHub Actions handles the production deployment to GitHub Pages.
+Saweeg Digital Menu is a lightweight bilingual Vite and TypeScript website for the Al-Maqsad and Bustan Al-Mustazal branches. Product, branch, category, and extras data are maintained as typed TypeScript data, while GitHub Actions deploys the site to GitHub Pages at `https://menu.saweegsa.com/`.

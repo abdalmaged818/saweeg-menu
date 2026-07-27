@@ -1,6 +1,6 @@
 import type { BranchId, Language } from "../types/menu";
 
-const pagesBaseUrl = "https://abdalmaged818.github.io/saweeg-menu/";
+const officialSiteUrl = "https://menu.saweegsa.com/";
 
 export const siteConfig = {
   brandName: {
@@ -17,7 +17,7 @@ export const siteConfig = {
     whatsapp: "https://wa.me/+966570052424"
   },
   repositoryUrl: "https://github.com/abdalmaged818/saweeg-menu",
-  githubPagesUrl: pagesBaseUrl,
+  siteUrl: officialSiteUrl,
   copyrightName: {
     ar: "سويق",
     en: "Saweeg"
@@ -42,7 +42,7 @@ export const assetUrl = (path: string): string =>
   `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
 
 export const absoluteAssetUrl = (path: string): string =>
-  new URL(path.replace(/^\/+/, ""), siteConfig.githubPagesUrl).toString();
+  new URL(path.replace(/^\/+/, ""), siteConfig.siteUrl).toString();
 
 export const branchMapUrl = (branch: BranchId): string =>
   branch === "maqsed"
@@ -54,7 +54,7 @@ export const pageUrl = (
   branch?: BranchId
 ): string => {
   const languagePath = language === "en" ? "en/" : "";
-  const url = new URL(`${languagePath}`, siteConfig.githubPagesUrl);
+  const url = new URL(`${languagePath}`, siteConfig.siteUrl);
 
   if (branch) {
     url.searchParams.set("branch", branch);

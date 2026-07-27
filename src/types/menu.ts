@@ -21,18 +21,28 @@ export interface Category {
   nameEn: string;
 }
 
-export interface Product {
+interface ProductBase {
   id: string;
   nameAr: string;
   nameEn: string;
   price: number;
   category: Exclude<CategoryId, "drinks">;
+  branches: BranchId[];
+}
+
+export interface ImageProduct extends ProductBase {
+  displayMode: "image";
   image: string;
   imageFit?: "cover" | "contain";
   imagePosition?: string;
   imageScale?: number;
-  branches: BranchId[];
 }
+
+export interface CompactProduct extends ProductBase {
+  displayMode: "compact";
+}
+
+export type Product = ImageProduct | CompactProduct;
 
 export interface Extra {
   id: string;

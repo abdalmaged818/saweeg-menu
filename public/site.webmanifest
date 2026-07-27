@@ -3,14 +3,14 @@
   "short_name": "سويق",
   "lang": "ar",
   "dir": "rtl",
-  "start_url": "/saweeg-menu/",
-  "scope": "/saweeg-menu/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "theme_color": "#556A51",
   "background_color": "#F8F6F1",
   "icons": [
     {
-      "src": "/saweeg-menu/assets/brand/favicon.svg",
+      "src": "/assets/brand/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

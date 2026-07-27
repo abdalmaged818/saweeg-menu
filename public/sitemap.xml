@@ -2,25 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://abdalmaged818.github.io/saweeg-menu/</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://abdalmaged818.github.io/saweeg-menu/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://abdalmaged818.github.io/saweeg-menu/en/" />
+    <loc>https://menu.saweegsa.com/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://menu.saweegsa.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://menu.saweegsa.com/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://menu.saweegsa.com/" />
   </url>
   <url>
-    <loc>https://abdalmaged818.github.io/saweeg-menu/en/</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://abdalmaged818.github.io/saweeg-menu/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://abdalmaged818.github.io/saweeg-menu/en/" />
+    <loc>https://menu.saweegsa.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://menu.saweegsa.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://menu.saweegsa.com/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://menu.saweegsa.com/" />
   </url>
   <url>
-    <loc>https://abdalmaged818.github.io/saweeg-menu/?branch=maqsed</loc>
+    <loc>https://menu.saweegsa.com/?branch=maqsed</loc>
   </url>
   <url>
-    <loc>https://abdalmaged818.github.io/saweeg-menu/?branch=bustan</loc>
+    <loc>https://menu.saweegsa.com/?branch=bustan</loc>
   </url>
   <url>
-    <loc>https://abdalmaged818.github.io/saweeg-menu/en/?branch=maqsed</loc>
+    <loc>https://menu.saweegsa.com/en/?branch=maqsed</loc>
   </url>
   <url>
-    <loc>https://abdalmaged818.github.io/saweeg-menu/en/?branch=bustan</loc>
+    <loc>https://menu.saweegsa.com/en/?branch=bustan</loc>
   </url>
 </urlset>

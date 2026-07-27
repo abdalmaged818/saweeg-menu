@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://abdalmaged818.github.io/saweeg-menu/sitemap.xml
+Sitemap: https://menu.saweegsa.com/sitemap.xml

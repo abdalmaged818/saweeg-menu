@@ -22,6 +22,11 @@
     gap: 1.2rem;
   }
 
+  .compact-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
   .store-card,
   .contact-card {
     grid-template-columns: minmax(0, 1fr) auto;

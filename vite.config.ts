@@ -2,7 +2,7 @@ import { resolve } from "node:path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/saweeg-menu/",
+  base: "/",
   build: {
     target: "es2022",
     rollupOptions: {

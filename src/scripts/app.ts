@@ -123,10 +123,17 @@ const updateStructuredData = (state: AppState): void => {
 };
 
 const updateSeoLinks = (state: AppState): void => {
+  const currentPageUrl = pageUrl(state.language, state.branch);
   const canonical =
     document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
   if (canonical) {
-    canonical.href = pageUrl(state.language, state.branch);
+    canonical.href = currentPageUrl;
+  }
+  const openGraphUrl = document.querySelector<HTMLMetaElement>(
+    'meta[property="og:url"]'
+  );
+  if (openGraphUrl) {
+    openGraphUrl.content = currentPageUrl;
   }
   document
     .querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]')

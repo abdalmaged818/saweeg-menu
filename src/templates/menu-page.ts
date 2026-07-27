@@ -7,9 +7,10 @@ import { getMessages } from "../i18n";
 import type {
   AppState,
   Branch,
+  CompactProduct,
   Extra,
-  Language,
-  Product
+  ImageProduct,
+  Language
 } from "../types/menu";
 
 export interface MenuPageRefs {
@@ -422,7 +423,7 @@ const createFooter = (state: AppState): HTMLElement => {
 };
 
 const createProductCard = (
-  product: Product,
+  product: ImageProduct,
   language: Language
 ): HTMLElement => {
   const messages = getMessages(language);
@@ -454,6 +455,28 @@ const createProductCard = (
   );
   content.append(title, price);
   article.append(media, content);
+  return article;
+};
+
+const createCompactProductCard = (
+  product: CompactProduct,
+  language: Language
+): HTMLElement => {
+  const messages = getMessages(language);
+  const article = createElement("article", "compact-product-card");
+  article.dataset.productId = product.id;
+  article.dataset.displayMode = product.displayMode;
+  const title = createElement(
+    "h3",
+    "compact-product-card__name",
+    localName(product, language)
+  );
+  const price = createElement(
+    "p",
+    "compact-product-card__price",
+    messages.priceLabel(product.price)
+  );
+  article.append(title, price);
   return article;
 };
 
@@ -492,14 +515,34 @@ export const renderMenuSections = (
       const section = createElement("section", "menu-category");
       const titleId = `category-${category.id}`;
       section.setAttribute("aria-labelledby", titleId);
-      const grid = createElement("div", "product-grid");
-      categoryProducts.forEach((product) =>
-        grid.append(createProductCard(product, state.language))
+      const imageProducts = categoryProducts.filter(
+        (product): product is ImageProduct => product.displayMode === "image"
       );
-      section.append(
-        createSectionHeading(localName(category, state.language), titleId),
-        grid
+      const compactProducts = categoryProducts.filter(
+        (product): product is CompactProduct => product.displayMode === "compact"
       );
+      const heading = createSectionHeading(
+        localName(category, state.language),
+        titleId
+      );
+      section.append(heading);
+
+      if (imageProducts.length > 0) {
+        const imageGrid = createElement("div", "product-grid products-grid");
+        imageProducts.forEach((product) =>
+          imageGrid.append(createProductCard(product, state.language))
+        );
+        section.append(imageGrid);
+      }
+
+      if (compactProducts.length > 0) {
+        const compactGrid = createElement("div", "compact-products-grid");
+        compactProducts.forEach((product) =>
+          compactGrid.append(createCompactProductCard(product, state.language))
+        );
+        section.append(compactGrid);
+      }
+
       fragment.append(section);
     });
   container.replaceChildren(fragment);

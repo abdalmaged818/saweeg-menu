@@ -103,6 +103,16 @@
   gap: 1rem;
 }
 
+.compact-products-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.product-grid + .compact-products-grid {
+  margin-block-start: 1rem;
+}
+
 .menu-category--extras {
   background: var(--surface-soft);
   padding-block: 3rem;
