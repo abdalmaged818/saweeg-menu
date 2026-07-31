@@ -147,7 +147,10 @@ export const products: Product[] = [
     nameEn: "Talbinah Powder",
     price: 25,
     category: "ready",
-    displayMode: "compact",
+    displayMode: "image",
+    image: "al-jabirah-box.webp",
+    imageFit: "cover",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
