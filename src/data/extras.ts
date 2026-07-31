@@ -9,14 +9,14 @@ export const extras: Extra[] = [
     nameEn: "Saudi Coffee",
     quantityAr: "كوب",
     quantityEn: "Cup",
-    price: 5,
+    price: 6,
     branches: [...sharedBranches]
   },
   {
     id: "coffee-of-day-hot",
     nameAr: "قهوة اليوم - حارة",
     nameEn: "Coffee of the Day - Hot",
-    price: 9,
+    price: 10,
     branches: ["bustan"]
   },
   {
