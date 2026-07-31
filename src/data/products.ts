@@ -102,10 +102,7 @@ export const products: Product[] = [
     nameEn: "Talbinah Sachet Box",
     price: 58,
     category: "boxes",
-    displayMode: "image",
-    image: "talbinah-sachet-box.webp",
-    imageFit: "cover",
-    imagePosition: "center",
+    displayMode: "compact",
     branches: [...sharedBranches]
   },
   {
@@ -126,7 +123,10 @@ export const products: Product[] = [
     nameEn: "Al-Jabirah Box",
     price: 68,
     category: "boxes",
-    displayMode: "compact",
+    displayMode: "image",
+    image: "talbinah-sachet-box.webp",
+    imageFit: "cover",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
