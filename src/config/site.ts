@@ -12,7 +12,7 @@ export const siteConfig = {
   links: {
     onlineStore: "https://saweegsa.com/ar",
     maqsedMap: "https://maps.app.goo.gl/TrhRQ4bykuBKf6bo7?g_st=ipc",
-    bustanMap: "https://maps.app.goo.gl/KRxqbYZQBAshEs556?g_st=ic",
+    bustanMap: "https://maps.app.goo.gl/D7PPQc497DZeLxWh8?g_st=ic",
     linktree: "https://linktr.ee/saweeg",
     whatsapp: "https://wa.me/+966570052424"
   },

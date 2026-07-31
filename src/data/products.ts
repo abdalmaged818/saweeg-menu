@@ -126,10 +126,7 @@ export const products: Product[] = [
     nameEn: "Al-Jabirah Box",
     price: 68,
     category: "boxes",
-    displayMode: "image",
-    image: "al-jabirah-box.webp",
-    imageFit: "cover",
-    imagePosition: "center",
+    displayMode: "compact",
     branches: [...sharedBranches]
   },
   {
