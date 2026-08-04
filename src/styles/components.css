@@ -339,7 +339,7 @@ html[lang="ar"] .eyebrow {
 }
 
 .product-card__content {
-  min-height: 82px;
+  min-height: 96px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -347,8 +347,12 @@ html[lang="ar"] .eyebrow {
   padding: 1rem;
 }
 
-.product-card__name {
+.product-card__copy,
+.compact-product-card__copy {
   min-width: 0;
+}
+
+.product-card__name {
   margin: 0;
   color: var(--green-dark);
   font-size: 1.05rem;
@@ -366,6 +370,24 @@ html[lang="ar"] .eyebrow {
   font-size: 0.92rem;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.product-card__quantity,
+.compact-product-card__quantity {
+  margin: 0.18rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.product-card__note,
+.compact-product-card__note {
+  margin: 0.32rem 0 0;
+  color: var(--brown-dark);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.45;
 }
 
 .compact-product-card {
@@ -390,7 +412,6 @@ html[lang="ar"] .eyebrow {
 }
 
 .compact-product-card__name {
-  min-width: 0;
   margin: 0;
   color: var(--green-dark);
   font-size: 1.05rem;

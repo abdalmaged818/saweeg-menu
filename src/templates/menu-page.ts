@@ -41,6 +41,33 @@ const localName = (
   language: Language
 ): string => (language === "ar" ? item.nameAr : item.nameEn);
 
+const localQuantity = (
+  item: { quantityAr?: string; quantityEn?: string },
+  language: Language
+): string | undefined =>
+  language === "ar" ? item.quantityAr : item.quantityEn;
+
+const localNote = (
+  item: { noteAr?: string; noteEn?: string },
+  language: Language
+): string | undefined => language === "ar" ? item.noteAr : item.noteEn;
+
+const appendProductDetails = (
+  container: HTMLElement,
+  product: ImageProduct | CompactProduct,
+  language: Language,
+  classPrefix: "product-card" | "compact-product-card"
+): void => {
+  const quantity = localQuantity(product, language);
+  const note = localNote(product, language);
+  if (quantity) {
+    container.append(createElement("p", `${classPrefix}__quantity`, quantity));
+  }
+  if (note) {
+    container.append(createElement("p", `${classPrefix}__note`, note));
+  }
+};
+
 const appHref = (
   language: Language,
   branch: AppState["branch"]
@@ -428,6 +455,8 @@ const createProductCard = (
 ): HTMLElement => {
   const messages = getMessages(language);
   const article = createElement("article", "product-card");
+  article.dataset.productId = product.id;
+  article.dataset.displayMode = product.displayMode;
   const media = createElement("div", "product-card__media");
   const decorative = createElement("span", "product-card__fallback");
   decorative.setAttribute("aria-hidden", "true");
@@ -447,13 +476,16 @@ const createProductCard = (
   media.append(decorative, image);
 
   const content = createElement("div", "product-card__content");
+  const copy = createElement("div", "product-card__copy");
   const title = createElement("h3", "product-card__name", name);
+  copy.append(title);
+  appendProductDetails(copy, product, language, "product-card");
   const price = createElement(
     "p",
     "product-card__price",
     messages.priceLabel(product.price)
   );
-  content.append(title, price);
+  content.append(copy, price);
   article.append(media, content);
   return article;
 };
@@ -466,17 +498,20 @@ const createCompactProductCard = (
   const article = createElement("article", "compact-product-card");
   article.dataset.productId = product.id;
   article.dataset.displayMode = product.displayMode;
+  const copy = createElement("div", "compact-product-card__copy");
   const title = createElement(
     "h3",
     "compact-product-card__name",
     localName(product, language)
   );
+  copy.append(title);
+  appendProductDetails(copy, product, language, "compact-product-card");
   const price = createElement(
     "p",
     "compact-product-card__price",
     messages.priceLabel(product.price)
   );
-  article.append(title, price);
+  article.append(copy, price);
   return article;
 };
 

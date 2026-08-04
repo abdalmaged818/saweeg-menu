@@ -3,8 +3,8 @@ import type { Category } from "../types/menu";
 export const categories: Category[] = [
   {
     id: "talbinah",
-    nameAr: "التلبينة",
-    nameEn: "Talbinah"
+    nameAr: "التلبينة والآيسكريم",
+    nameEn: "Talbinah & Ice Cream"
   },
   {
     id: "sweets",

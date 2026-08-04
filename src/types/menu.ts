@@ -25,6 +25,10 @@ interface ProductBase {
   id: string;
   nameAr: string;
   nameEn: string;
+  quantityAr?: string;
+  quantityEn?: string;
+  noteAr?: string;
+  noteEn?: string;
   price: number;
   category: Exclude<CategoryId, "drinks">;
   branches: BranchId[];

@@ -5,14 +5,34 @@ const sharedBranches = ["maqsed", "bustan"] as const;
 export const products: Product[] = [
   {
     id: "talbinah-ice-cream",
-    nameAr: "آيسكريم تلبينة نبوية",
+    nameAr: "آيسكريم التلبينة النبوية",
     nameEn: "Talbinah Ice Cream",
+    noteAr: "إضافة مكسرات مكرملة +2 ر.س",
+    noteEn: "Caramelized Nuts Add-on +SAR 2",
     price: 14,
     category: "talbinah",
     displayMode: "image",
     image: "talbinah-ice-cream.webp",
     imageFit: "cover",
     imagePosition: "center",
+    branches: [...sharedBranches]
+  },
+  {
+    id: "mango-ice-cream",
+    nameAr: "آيس كريم المانجا",
+    nameEn: "Mango Ice Cream",
+    price: 14,
+    category: "talbinah",
+    displayMode: "compact",
+    branches: [...sharedBranches]
+  },
+  {
+    id: "mixed-ice-cream",
+    nameAr: "آيس كريم مكس",
+    nameEn: "Mixed Ice Cream",
+    price: 14,
+    category: "talbinah",
+    displayMode: "compact",
     branches: [...sharedBranches]
   },
   {
@@ -40,6 +60,26 @@ export const products: Product[] = [
     branches: [...sharedBranches]
   },
   {
+    id: "talbinah-matcha",
+    nameAr: "ماتشا التلبينة",
+    nameEn: "Talbinah Matcha",
+    price: 22,
+    category: "talbinah",
+    displayMode: "compact",
+    branches: [...sharedBranches]
+  },
+  {
+    id: "hot-talbinah-one-liter",
+    nameAr: "تلبينة حارة – 1 لتر",
+    nameEn: "Hot Talbinah – 1 Liter",
+    quantityAr: "1 لتر",
+    quantityEn: "1 Liter",
+    price: 49,
+    category: "talbinah",
+    displayMode: "compact",
+    branches: ["maqsed"]
+  },
+  {
     id: "talbinah-lotus-cheesecake",
     nameAr: "تشيز كيك تلبينة لوتس",
     nameEn: "Talbinah Lotus Cheesecake",
@@ -52,9 +92,9 @@ export const products: Product[] = [
     branches: [...sharedBranches]
   },
   {
-    id: "dates-with-sawiq",
+    id: "dates-with-saweeg",
     nameAr: "تمر بالسويق",
-    nameEn: "Dates with Sawiq",
+    nameEn: "Dates with Saweeg",
     price: 19,
     category: "sweets",
     displayMode: "compact",
@@ -64,6 +104,8 @@ export const products: Product[] = [
     id: "damkah",
     nameAr: "الدمكة",
     nameEn: "Damkah",
+    quantityAr: "8 قطع",
+    quantityEn: "8 Pieces",
     price: 19,
     category: "sweets",
     displayMode: "image",
@@ -73,9 +115,29 @@ export const products: Product[] = [
     branches: [...sharedBranches]
   },
   {
+    id: "madini-crepe-cheese",
+    nameAr: "كريب مديني أجبان",
+    nameEn: "Madini Crepe Cheese",
+    price: 9,
+    category: "sweets",
+    displayMode: "compact",
+    branches: ["bustan"]
+  },
+  {
+    id: "madini-crepe-signature",
+    nameAr: "كريب مديني سجنتشر",
+    nameEn: "Madini Crepe Signature",
+    price: 9,
+    category: "sweets",
+    displayMode: "compact",
+    branches: ["bustan"]
+  },
+  {
     id: "maamoul-box",
     nameAr: "بوكس معمول",
     nameEn: "Maamoul Box",
+    quantityAr: "27 قطعة",
+    quantityEn: "27 Pieces",
     price: 78,
     category: "boxes",
     displayMode: "image",
@@ -85,10 +147,21 @@ export const products: Product[] = [
     branches: [...sharedBranches]
   },
   {
-    id: "basbousa-box",
-    nameAr: "بوكس بسبوسة",
-    nameEn: "Basbousa Box",
-    price: 69,
+    id: "safawi-dates-gift-box",
+    nameAr: "بوكس تمر صفاوي محشي مكسرات",
+    nameEn: "Safawi Dates Stuffed with Mixed Nuts Gift Box",
+    price: 78,
+    category: "boxes",
+    displayMode: "compact",
+    branches: [...sharedBranches]
+  },
+  {
+    id: "date-pecan-tart-box",
+    nameAr: "بوكس تارت التمر والبيكان",
+    nameEn: "Date Pecan Tart Box",
+    quantityAr: "14 قطعة",
+    quantityEn: "14 Pieces",
+    price: 51,
     category: "boxes",
     displayMode: "image",
     image: "basbousa-box.webp",
@@ -100,27 +173,17 @@ export const products: Product[] = [
     id: "talbinah-sachet-box",
     nameAr: "بوكس أظرف التلبينة",
     nameEn: "Talbinah Sachet Box",
-    price: 58,
+    quantityAr: "12 ظرف",
+    quantityEn: "12 Sachets",
+    price: 68,
     category: "boxes",
     displayMode: "compact",
     branches: [...sharedBranches]
   },
   {
-    id: "gift-box",
-    nameAr: "بوكس الإهداء",
-    nameEn: "Gift Box",
-    price: 42,
-    category: "boxes",
-    displayMode: "image",
-    image: "gift-box.webp",
-    imageFit: "cover",
-    imagePosition: "center",
-    branches: [...sharedBranches]
-  },
-  {
     id: "al-jabirah-box",
     nameAr: "بوكس الجابرة",
-    nameEn: "Al-Jabirah Box",
+    nameEn: "Al Jabirah Box",
     price: 68,
     category: "boxes",
     displayMode: "image",
@@ -130,13 +193,15 @@ export const products: Product[] = [
     branches: [...sharedBranches]
   },
   {
-    id: "sawiq-powder",
-    nameAr: "بودرة سويق",
-    nameEn: "Sawiq Powder",
-    price: 25,
-    category: "ready",
+    id: "gift-box",
+    nameAr: "بوكس الإهداء",
+    nameEn: "Gift Box",
+    quantityAr: "عبوتان من اختيارك",
+    quantityEn: "2 Containers of Your Choice",
+    price: 42,
+    category: "boxes",
     displayMode: "image",
-    image: "sawiq-powder.webp",
+    image: "gift-box.webp",
     imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
@@ -144,7 +209,7 @@ export const products: Product[] = [
   {
     id: "talbinah-powder",
     nameAr: "بودرة تلبينة نبوية",
-    nameEn: "Talbinah Powder",
+    nameEn: "Talbinah Nabawi Powder",
     price: 25,
     category: "ready",
     displayMode: "image",
@@ -154,12 +219,35 @@ export const products: Product[] = [
     branches: [...sharedBranches]
   },
   {
-    id: "madini-crepe-cheese-signature",
-    nameAr: "كريب مديني - أجبان سجنتشر",
-    nameEn: "Madini Crepe - Cheese Signature",
-    price: 9,
-    category: "sweets",
+    id: "saweeg-powder",
+    nameAr: "بودرة سويق",
+    nameEn: "Saweeg Powder",
+    price: 25,
+    category: "ready",
+    displayMode: "image",
+    image: "sawiq-powder.webp",
+    imageFit: "cover",
+    imagePosition: "center",
+    branches: [...sharedBranches]
+  },
+  {
+    id: "talbinah-sachets",
+    nameAr: "أظرف التلبينة",
+    nameEn: "Talbinah Sachets",
+    quantityAr: "ظرف واحد",
+    quantityEn: "1 Sachet",
+    price: 5.5,
+    category: "ready",
     displayMode: "compact",
-    branches: ["bustan"]
+    branches: [...sharedBranches]
+  },
+  {
+    id: "mixed-caramelized-nuts-sachet",
+    nameAr: "ظرف مكسرات مكرملة مكس",
+    nameEn: "Mixed Caramelized Nuts Sachet",
+    price: 12,
+    category: "ready",
+    displayMode: "compact",
+    branches: [...sharedBranches]
   }
 ];

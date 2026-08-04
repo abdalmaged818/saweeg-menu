@@ -81,8 +81,12 @@
 }
 
 @media (min-width: 980px) {
-  .product-grid {
+  .product-grid,
+  .compact-products-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .product-grid {
     gap: 1.35rem;
   }
 
