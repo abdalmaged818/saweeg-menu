@@ -166,14 +166,14 @@ public/assets/products/
 4. `talbinah-lotus-cheesecake.webp`
 5. `damkah.webp`
 6. `maamoul-box.webp`
-7. `basbousa-box.webp`
-8. `talbinah-sachet-box.webp`
+7. `date-pecan-tart-box.webp`
+8. `al-jabirah-box.webp`
 9. `gift-box.webp`
-10. `al-jabirah-box.webp`
+10. `talbinah-powder.webp`
 11. `sawiq-powder.webp`
 
-المنتجات `dates-with-sawiq` و`talbinah-powder`
-و`madini-crepe-cheese-signature` تستخدم `displayMode: "compact"` ولا تنشئ
+المنتجات `dates-with-saweeg` و`talbinah-sachet-box`
+و`mixed-caramelized-nuts-sachet` تستخدم `displayMode: "compact"` ولا تنشئ
 مساحة صورة أو Placeholder. لا يُحوّل أي منها إلى بطاقة مصورة إلا بعد إضافة
 مصدر رسمي مطابق وتحديث `displayMode` واسم الملف في البيانات.
 

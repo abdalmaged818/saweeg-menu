@@ -164,7 +164,7 @@ export const products: Product[] = [
     price: 51,
     category: "boxes",
     displayMode: "image",
-    image: "basbousa-box.webp",
+    image: "date-pecan-tart-box.webp",
     imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
@@ -187,7 +187,7 @@ export const products: Product[] = [
     price: 68,
     category: "boxes",
     displayMode: "image",
-    image: "talbinah-sachet-box.webp",
+    image: "al-jabirah-box.webp",
     imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
@@ -213,7 +213,7 @@ export const products: Product[] = [
     price: 25,
     category: "ready",
     displayMode: "image",
-    image: "al-jabirah-box.webp",
+    image: "talbinah-powder.webp",
     imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
@@ -243,8 +243,8 @@ export const products: Product[] = [
   },
   {
     id: "mixed-caramelized-nuts-sachet",
-    nameAr: "ظرف مكسرات مكرملة مكس",
-    nameEn: "Mixed Caramelized Nuts Sachet",
+    nameAr: "عبوة مكسرات مكرملة مكس",
+    nameEn: "Mixed Caramelized Nuts Pack",
     price: 12,
     category: "ready",
     displayMode: "compact",

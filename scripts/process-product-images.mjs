@@ -25,7 +25,7 @@ const WEBP_QUALITY = 86;
 const imageJobs = [
   {
     sourceName: "الجابرة تلبينة.jpg",
-    outputName: "al-jabirah-box.webp",
+    outputName: "talbinah-powder.webp",
     verticalCrop: 0.78
   },
   {
@@ -50,12 +50,12 @@ const imageJobs = [
   },
   {
     sourceName: "بوكس التلبينة.jpg",
-    outputName: "talbinah-sachet-box.webp",
+    outputName: "al-jabirah-box.webp",
     verticalCrop: 1
   },
   {
     sourceName: "بوكس بسبوسه.jpg",
-    outputName: "basbousa-box.webp",
+    outputName: "date-pecan-tart-box.webp",
     verticalCrop: 0.5
   },
   {
