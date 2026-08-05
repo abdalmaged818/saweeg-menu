@@ -52,6 +52,24 @@ const localNote = (
   language: Language
 ): string | undefined => language === "ar" ? item.noteAr : item.noteEn;
 
+const normalizedLabel = (value: string): string =>
+  value.toLocaleLowerCase().replace(/[\s\p{P}\p{S}]+/gu, "");
+
+const isQuantityAlreadyInName = (
+  item: { nameAr: string; nameEn: string; quantityAr?: string; quantityEn?: string },
+  language: Language
+): boolean => {
+  const quantity = localQuantity(item, language);
+  if (!quantity) return false;
+  const name = normalizedLabel(localName(item, language));
+  const normalizedQuantity = normalizedLabel(quantity);
+  const quantityTokens = quantity
+    .split(/[\s\p{P}\p{S}]+/u)
+    .map(normalizedLabel)
+    .filter(Boolean);
+  return name.includes(normalizedQuantity) || quantityTokens.every((token) => name.includes(token));
+};
+
 const appendProductDetails = (
   container: HTMLElement,
   product: ImageProduct | CompactProduct,
@@ -60,7 +78,7 @@ const appendProductDetails = (
 ): void => {
   const quantity = localQuantity(product, language);
   const note = localNote(product, language);
-  if (quantity) {
+  if (quantity && !isQuantityAlreadyInName(product, language)) {
     container.append(createElement("p", `${classPrefix}__quantity`, quantity));
   }
   if (note) {
@@ -409,10 +427,16 @@ const createFooter = (state: AppState): HTMLElement => {
   const footer = createElement("footer", "site-footer");
   const inner = createElement("div", "container footer-grid");
   const brandColumn = createElement("div", "footer-brand");
-  brandColumn.append(
-    createElement("p", "footer-wordmark", siteConfig.brandName[state.language]),
-    createElement("p", "footer-tagline", messages.footerTagline)
-  );
+  const logoWrap = createElement("div", "footer-logo-wrap");
+  const logo = createElement("img", "footer-logo");
+  logo.src = assetUrl(siteConfig.logoPath);
+  logo.alt = state.language === "ar" ? "شعار سويق" : "Saweeg logo";
+  logo.width = 68;
+  logo.height = 68;
+  logo.loading = "lazy";
+  logo.decoding = "async";
+  logoWrap.append(logo);
+  brandColumn.append(logoWrap, createElement("p", "footer-tagline", messages.footerTagline));
 
   const nav = createElement("nav", "footer-nav");
   nav.setAttribute(
@@ -464,8 +488,8 @@ const createProductCard = (
   const name = localName(product, language);
   image.src = assetUrl(`assets/products/${product.image}`);
   image.alt = messages.productImageAlt(name);
-  image.width = 560;
-  image.height = 560;
+  image.width = 1400;
+  image.height = 1050;
   image.loading = "lazy";
   image.decoding = "async";
   image.dataset.fallbackKind = "product";
@@ -521,7 +545,7 @@ const createExtraRow = (extra: Extra, language: Language): HTMLElement => {
   const copy = createElement("div", "extra-row__copy");
   copy.append(createElement("h3", "extra-row__name", localName(extra, language)));
   const quantity = language === "ar" ? extra.quantityAr : extra.quantityEn;
-  if (quantity) {
+  if (quantity && !isQuantityAlreadyInName(extra, language)) {
     copy.append(createElement("p", "extra-row__quantity", quantity));
   }
   row.append(

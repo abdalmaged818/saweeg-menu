@@ -4,7 +4,7 @@
   }
 }
 
-@media (min-width: 640px) {
+@media (min-width: 600px) {
   .container {
     width: min(calc(100% - 3rem), var(--max-width));
   }
@@ -80,7 +80,7 @@
   }
 }
 
-@media (min-width: 980px) {
+@media (min-width: 1000px) {
   .product-grid,
   .compact-products-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));

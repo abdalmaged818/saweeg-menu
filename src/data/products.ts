@@ -13,7 +13,7 @@ export const products: Product[] = [
     category: "talbinah",
     displayMode: "image",
     image: "talbinah-ice-cream.webp",
-    imageFit: "contain",
+    imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
   },
@@ -25,7 +25,7 @@ export const products: Product[] = [
     category: "talbinah",
     displayMode: "image",
     image: "mango-ice-cream.webp",
-    imageFit: "contain",
+    imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
   },
@@ -37,7 +37,7 @@ export const products: Product[] = [
     category: "talbinah",
     displayMode: "image",
     image: "mixed-ice-cream.webp",
-    imageFit: "contain",
+    imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
   },
@@ -93,7 +93,7 @@ export const products: Product[] = [
     category: "sweets",
     displayMode: "image",
     image: "talbinah-lotus-cheesecake.webp",
-    imageFit: "contain",
+    imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
   },
@@ -105,7 +105,7 @@ export const products: Product[] = [
     category: "sweets",
     displayMode: "image",
     image: "dates-with-saweeg.webp",
-    imageFit: "contain",
+    imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
   },
@@ -131,7 +131,7 @@ export const products: Product[] = [
     category: "sweets",
     displayMode: "image",
     image: "madini-crepe-cheese.webp",
-    imageFit: "contain",
+    imageFit: "cover",
     imagePosition: "center",
     branches: ["bustan"]
   },
@@ -143,7 +143,7 @@ export const products: Product[] = [
     category: "sweets",
     displayMode: "image",
     image: "madini-crepe-signature.webp",
-    imageFit: "contain",
+    imageFit: "cover",
     imagePosition: "center",
     branches: ["bustan"]
   },
@@ -169,7 +169,7 @@ export const products: Product[] = [
     category: "boxes",
     displayMode: "image",
     image: "safawi-dates-gift-box.webp",
-    imageFit: "contain",
+    imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
   },
@@ -197,7 +197,7 @@ export const products: Product[] = [
     category: "boxes",
     displayMode: "image",
     image: "talbinah-sachet-box.webp",
-    imageFit: "contain",
+    imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
   },
@@ -261,7 +261,7 @@ export const products: Product[] = [
     category: "ready",
     displayMode: "image",
     image: "talbinah-sachets.webp",
-    imageFit: "contain",
+    imageFit: "cover",
     imagePosition: "center",
     branches: [...sharedBranches]
   },
