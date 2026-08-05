@@ -19,8 +19,9 @@ const outputDirectory = path.join(
   "products"
 );
 
-const MAX_SIDE = 1400;
+const OUTPUT_SIDE = 1400;
 const WEBP_QUALITY = 86;
+const CANVAS_COLOR = { r: 248, g: 246, b: 241, alpha: 1 };
 
 const imageJobs = [
   {
@@ -34,9 +35,19 @@ const imageJobs = [
     verticalCrop: 0.5
   },
   {
-    sourceName: "ايسكريم تلبينة نبوية.jpg",
+    sourceName: "ايسكريم بالتلبينة النبوية مع مكسرات.jpg",
     outputName: "talbinah-ice-cream.webp",
-    verticalCrop: 0.5
+    processing: "contain"
+  },
+  {
+    sourceName: "ايسكريم المانجو.jpg",
+    outputName: "mango-ice-cream.webp",
+    processing: "contain"
+  },
+  {
+    sourceName: "ايسكريم مكس.jpg",
+    outputName: "mixed-ice-cream.webp",
+    processing: "contain"
   },
   {
     sourceName: "بودرة سويق.jpg",
@@ -74,9 +85,39 @@ const imageJobs = [
     verticalCrop: 0.55
   },
   {
-    sourceName: "تلبينه لوتس تشيز كيك.jpg",
+    sourceName: "تشيز كيك.jpg",
     outputName: "talbinah-lotus-cheesecake.webp",
-    verticalCrop: 0.5
+    processing: "contain"
+  },
+  {
+    sourceName: "تمر بالسويق.JPG",
+    outputName: "dates-with-saweeg.webp",
+    processing: "contain"
+  },
+  {
+    sourceName: "كريب مديني أجبان.jpg",
+    outputName: "madini-crepe-cheese.webp",
+    processing: "contain"
+  },
+  {
+    sourceName: "كريب مديني سجنتشر.jpg",
+    outputName: "madini-crepe-signature.webp",
+    processing: "contain"
+  },
+  {
+    sourceName: "تمر صفاوي.jpg",
+    outputName: "safawi-dates-gift-box.webp",
+    processing: "contain"
+  },
+  {
+    sourceName: "ظرف التلبينة.JPG",
+    outputName: "talbinah-sachet-box.webp",
+    processing: "contain"
+  },
+  {
+    sourceName: "أظرف التلبينة.JPG",
+    outputName: "talbinah-sachets.webp",
+    processing: "contain"
   }
 ];
 
@@ -91,7 +132,12 @@ const fileExists = async (filePath) => {
 
 await fs.mkdir(outputDirectory, { recursive: true });
 
-for (const { sourceName, outputName, verticalCrop } of imageJobs) {
+for (const {
+  sourceName,
+  outputName,
+  verticalCrop = 0.5,
+  processing = "crop"
+} of imageJobs) {
   const sourcePath = path.join(sourceDirectory, sourceName);
   const outputPath = path.join(outputDirectory, outputName);
 
@@ -104,43 +150,70 @@ for (const { sourceName, outputName, verticalCrop } of imageJobs) {
     throw new Error(`Could not read image dimensions: ${sourcePath}`);
   }
 
-  const shouldSwapDimensions =
-    metadata.orientation !== undefined &&
-    metadata.orientation >= 5 &&
-    metadata.orientation <= 8;
-  const orientedWidth = shouldSwapDimensions
-    ? metadata.height
-    : metadata.width;
-  const orientedHeight = shouldSwapDimensions
-    ? metadata.width
-    : metadata.height;
-  const cropSide = Math.min(orientedWidth, orientedHeight);
-  const cropLeft = Math.round((orientedWidth - cropSide) / 2);
-  const cropTop = Math.round(
-    (orientedHeight - cropSide) * verticalCrop
-  );
-  const outputSide = Math.min(MAX_SIDE, cropSide);
-  const outputBuffer = await sharp(sourcePath)
-    .rotate()
-    .toColourspace("srgb")
-    .extract({
-      left: cropLeft,
-      top: cropTop,
-      width: cropSide,
-      height: cropSide
-    })
-    .resize({
-      width: outputSide,
-      height: outputSide,
-      fit: "cover",
-      withoutEnlargement: true
-    })
-    .webp({
-      quality: WEBP_QUALITY,
-      effort: 6,
-      smartSubsample: true
-    })
-    .toBuffer();
+  let outputBuffer;
+  let outputSide;
+  let processingSummary;
+
+  if (processing === "contain") {
+    outputSide = OUTPUT_SIDE;
+    processingSummary = "contain on brand canvas";
+    outputBuffer = await sharp(sourcePath)
+      .rotate()
+      .toColourspace("srgb")
+      .resize({
+        width: OUTPUT_SIDE,
+        height: OUTPUT_SIDE,
+        fit: "contain",
+        position: "centre",
+        background: CANVAS_COLOR,
+        withoutEnlargement: true
+      })
+      .webp({
+        quality: WEBP_QUALITY,
+        effort: 6,
+        smartSubsample: true
+      })
+      .toBuffer();
+  } else {
+    const shouldSwapDimensions =
+      metadata.orientation !== undefined &&
+      metadata.orientation >= 5 &&
+      metadata.orientation <= 8;
+    const orientedWidth = shouldSwapDimensions
+      ? metadata.height
+      : metadata.width;
+    const orientedHeight = shouldSwapDimensions
+      ? metadata.width
+      : metadata.height;
+    const cropSide = Math.min(orientedWidth, orientedHeight);
+    const cropLeft = Math.round((orientedWidth - cropSide) / 2);
+    const cropTop = Math.round(
+      (orientedHeight - cropSide) * verticalCrop
+    );
+    outputSide = Math.min(OUTPUT_SIDE, cropSide);
+    processingSummary = `crop top ${cropTop}px`;
+    outputBuffer = await sharp(sourcePath)
+      .rotate()
+      .toColourspace("srgb")
+      .extract({
+        left: cropLeft,
+        top: cropTop,
+        width: cropSide,
+        height: cropSide
+      })
+      .resize({
+        width: outputSide,
+        height: outputSide,
+        fit: "cover",
+        withoutEnlargement: true
+      })
+      .webp({
+        quality: WEBP_QUALITY,
+        effort: 6,
+        smartSubsample: true
+      })
+      .toBuffer();
+  }
 
   const outputMetadata = await sharp(outputBuffer).metadata();
   if (
@@ -155,7 +228,7 @@ for (const { sourceName, outputName, verticalCrop } of imageJobs) {
 
   const outputStats = await fs.stat(outputPath);
   console.log(
-    `${sourceName} -> ${outputName} (${outputSide}x${outputSide}, crop top ${cropTop}px, ${Math.round(
+    `${sourceName} -> ${outputName} (${outputSide}x${outputSide}, ${processingSummary}, ${Math.round(
       outputStats.size / 1024
     )} KB)`
   );

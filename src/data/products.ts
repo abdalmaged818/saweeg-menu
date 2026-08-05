@@ -13,7 +13,7 @@ export const products: Product[] = [
     category: "talbinah",
     displayMode: "image",
     image: "talbinah-ice-cream.webp",
-    imageFit: "cover",
+    imageFit: "contain",
     imagePosition: "center",
     branches: [...sharedBranches]
   },
@@ -23,7 +23,10 @@ export const products: Product[] = [
     nameEn: "Mango Ice Cream",
     price: 14,
     category: "talbinah",
-    displayMode: "compact",
+    displayMode: "image",
+    image: "mango-ice-cream.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -32,7 +35,10 @@ export const products: Product[] = [
     nameEn: "Mixed Ice Cream",
     price: 14,
     category: "talbinah",
-    displayMode: "compact",
+    displayMode: "image",
+    image: "mixed-ice-cream.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -87,7 +93,7 @@ export const products: Product[] = [
     category: "sweets",
     displayMode: "image",
     image: "talbinah-lotus-cheesecake.webp",
-    imageFit: "cover",
+    imageFit: "contain",
     imagePosition: "center",
     branches: [...sharedBranches]
   },
@@ -97,7 +103,10 @@ export const products: Product[] = [
     nameEn: "Dates with Saweeg",
     price: 19,
     category: "sweets",
-    displayMode: "compact",
+    displayMode: "image",
+    image: "dates-with-saweeg.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -120,7 +129,10 @@ export const products: Product[] = [
     nameEn: "Madini Crepe Cheese",
     price: 9,
     category: "sweets",
-    displayMode: "compact",
+    displayMode: "image",
+    image: "madini-crepe-cheese.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: ["bustan"]
   },
   {
@@ -129,7 +141,10 @@ export const products: Product[] = [
     nameEn: "Madini Crepe Signature",
     price: 9,
     category: "sweets",
-    displayMode: "compact",
+    displayMode: "image",
+    image: "madini-crepe-signature.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: ["bustan"]
   },
   {
@@ -152,7 +167,10 @@ export const products: Product[] = [
     nameEn: "Safawi Dates Stuffed with Mixed Nuts Gift Box",
     price: 78,
     category: "boxes",
-    displayMode: "compact",
+    displayMode: "image",
+    image: "safawi-dates-gift-box.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -177,7 +195,10 @@ export const products: Product[] = [
     quantityEn: "12 Sachets",
     price: 68,
     category: "boxes",
-    displayMode: "compact",
+    displayMode: "image",
+    image: "talbinah-sachet-box.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
@@ -238,7 +259,10 @@ export const products: Product[] = [
     quantityEn: "1 Sachet",
     price: 5.5,
     category: "ready",
-    displayMode: "compact",
+    displayMode: "image",
+    image: "talbinah-sachets.webp",
+    imageFit: "contain",
+    imagePosition: "center",
     branches: [...sharedBranches]
   },
   {
