@@ -257,7 +257,7 @@ export const products: Product[] = [
     nameEn: "Talbinah Sachets",
     quantityAr: "ظرف واحد",
     quantityEn: "1 Sachet",
-    price: 5.5,
+    price: 6,
     category: "ready",
     displayMode: "image",
     image: "talbinah-sachets.webp",
