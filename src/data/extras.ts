@@ -70,7 +70,7 @@ export const extras: Extra[] = [
     id: "coffee-of-the-day-maqsed",
     nameAr: "قهوة اليوم",
     nameEn: "Coffee of the Day",
-    price: 6,
+    price: 10,
     branches: ["maqsed"]
   },
   {
